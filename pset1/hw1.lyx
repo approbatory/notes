@@ -1,0 +1,1807 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass extarticle
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\headheight 1in
+\headsep 1in
+\footskip 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "basicstyle={\ttfamily \small}"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Problem Set #1 : Supervised Learning
+\end_layout
+
+\begin_layout Author
+Omer Hazon
+\end_layout
+
+\begin_layout Section
+Logistic Regression
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+Evaluating 
+\begin_inset Formula $\boldsymbol{H}=(H_{ij})=(\frac{\partial^{2}J(\boldsymbol{\theta})}{\partial\theta_{i}\partial\theta_{j}})$
+\end_inset
+
+ from 
+\begin_inset Formula $J(\boldsymbol{\theta})=\frac{1}{m}\sum_{i=1}^{m}\log(1+\exp(-y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)}))$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial J(\boldsymbol{\theta})}{\partial\theta_{j}}=\frac{1}{m}\sum_{i=1}^{m}\frac{-y^{(i)}x_{j}^{(i)}\exp(-y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)})}{1+\exp(-y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)})}=\frac{1}{m}\sum_{i=1}^{m}\frac{-y^{(i)}x_{j}^{(i)}}{1+\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)})}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial^{2}J(\boldsymbol{\theta})}{\partial\theta_{j}\partial\theta_{k}}=\frac{1}{m}\sum_{i=1}^{m}y^{(i)}x_{j}^{(i)}(1+\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)}))^{-2}\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)})y^{(i)}x_{k}^{(i)}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}\frac{(y^{(i)})^{2}x_{j}^{(i)}x_{k}^{(i)}\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)})}{(1+\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)}))^{2}}=\frac{1}{m}\sum_{i=1}^{m}x_{j}^{(i)}x_{k}^{(i)}\frac{\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)})}{(1+\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)}))^{2}}=H_{jk}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And for any given vector 
+\begin_inset Formula $\boldsymbol{z}=(z_{1},z_{2},z_{3},\dots,z_{n})$
+\end_inset
+
+, using
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\boldsymbol{z}^{T}\boldsymbol{H}\boldsymbol{z}=\sum_{j,k}z_{j}H_{jk}z_{k}=\sum_{j,k}z_{j}z_{k}\frac{1}{m}\sum_{i=1}^{m}x_{j}^{(i)}x_{k}^{(i)}\frac{\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)})}{(1+\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)}))^{2}}=
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+=\frac{1}{m}\sum_{i=1}^{m}\frac{\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)})}{(1+\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)}))^{2}}\sum_{j,k}z_{j}z_{k}x_{j}^{(i)}x_{k}^{(i)}=\frac{1}{m}\sum_{i=1}^{m}\frac{\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)})}{(1+\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)}))^{2}}(\sum_{j}z_{j}x_{j}^{(i)})(\sum_{j}z_{k}x_{k}^{(i)})=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\frac{1}{m}\sum_{i=1}^{m}\frac{\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)})}{(1+\exp(y^{(i)}\sum_{\alpha}\theta_{\alpha}x_{\alpha}^{(i)}))^{2}}(\sum_{j}z_{j}x_{j}^{(i)})^{2}
+\]
+
+\end_inset
+
+The final expression contains factors which are squares (and therefore 
+\begin_inset Formula $\geq0$
+\end_inset
+
+) and 
+\begin_inset Formula $\exp$
+\end_inset
+
+ which is positive.
+ The total sum over i, or 
+\begin_inset Formula $\boldsymbol{z}^{T}\boldsymbol{H}\boldsymbol{z}$
+\end_inset
+
+ for any 
+\begin_inset Formula $\boldsymbol{z}$
+\end_inset
+
+, is therefore 
+\begin_inset Formula $\geq0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+Using the formulae for the gradient and the hessian from (a), and the Newton's
+ method formula 
+\begin_inset Formula $\boldsymbol{\theta}\leftarrow\boldsymbol{\theta}-\boldsymbol{H}^{-1}\nabla J(\boldsymbol{\theta})$
+\end_inset
+
+, the algorithm converges onto 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\ttfamily}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+theta =
+\end_layout
+
+\begin_layout Plain Layout
+
+   -2.6205     0.7604     1.1719
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where the first value is the intercept term, and the second and third correspond
+ to 
+\begin_inset Formula $x_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $x_{2}$
+\end_inset
+
+ from the given dataset.
+\end_layout
+
+\begin_layout Standard
+Using the code:
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "p1.m"
+lstparams "caption={Code for logistic regression},language=Matlab"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(c)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename p1.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Poisson regression
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+The exponential family is defined as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(y;\eta)=b(y)\exp(\eta T(y)-a(\eta))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And the Poisson distribution as
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+P(y;\lambda)=\frac{1}{y!}\exp(-\lambda)\lambda^{y}=(y!)^{-1}\exp(-\lambda)\exp(y\log\lambda)=(y!)^{-1}\exp(y\log\lambda-\lambda)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Define 
+\begin_inset Formula $\eta=\log\lambda$
+\end_inset
+
+, 
+\begin_inset Formula $b(y)=(y!)^{-1}$
+\end_inset
+
+, 
+\begin_inset Formula $T(y)=y$
+\end_inset
+
+ , 
+\begin_inset Formula $a(\eta)=\exp(\eta)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then Poisson is 
+\begin_inset Formula $P(y;\eta)=b(y)\exp(\eta T(y)-a(\eta))$
+\end_inset
+
+.
+ This shows that the Poisson distribution is in the exponential family.
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+To construct the GLM, we assume 
+\begin_inset Formula $y|x;\theta\sim P(y;\eta)$
+\end_inset
+
+ as defined above for the Poisson distribution.
+ The model 
+\begin_inset Formula $\theta$
+\end_inset
+
+ predicts y given x with 
+\begin_inset Formula $h_{\theta}(x)=\mathbb{\boldsymbol{E}}[y|x;\theta]$
+\end_inset
+
+, and that 
+\begin_inset Formula $\eta=\theta^{T}x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Then, using the property of Poisson distributions whereby a parameter of
+ 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ leads to a mean of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, we have 
+\begin_inset Formula $h_{\theta}(x)=\mathbb{\boldsymbol{E}}[y|x;\theta]=\lambda=\exp(\eta)=\exp(\theta^{T}x)$
+\end_inset
+
+.
+ The canonical response function is the exponential.
+\end_layout
+
+\begin_layout Subsection*
+(c)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\log p(y^{(i)}|x^{(i)};\theta)=\log\left((y^{(i)}!)^{-1}\exp(y^{(i)}\theta^{T}x^{(i)}-\exp(\theta^{T}x^{(i)}))\right)=-\log(y^{(i)}!)+y^{(i)}\theta^{T}x^{(i)}-\exp(\theta^{T}x^{(i)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\theta}\log p(y^{(i)}|x^{(i)};\theta)=y^{(i)}x^{(i)}-\exp(\theta^{T}x^{(i)})x^{(i)}=\left(y^{(i)}-\exp(\theta^{T}x^{(i)})\right)x^{(i)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Taking the j-th element in the gradient as 
+\begin_inset Formula $\partial/\partial\theta_{j}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial\log p(y^{(i)}|x^{(i)};\theta)}{\partial\theta_{j}}=\left(y^{(i)}-\exp(\theta^{T}x^{(i)})\right)x_{j}^{(i)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And the gradient ascent rule:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\theta_{j}\leftarrow\theta_{j}+\alpha\left(y^{(i)}-\exp(\theta^{T}x^{(i)})\right)x_{j}^{(i)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Expressed with the canonical response 
+\begin_inset Formula $h_{\theta}(x)=\exp(\theta^{T}x)$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\theta_{j}\leftarrow\theta_{j}+\alpha\left(y^{(i)}-h_{\theta}(x^{(i)})\right)x_{j}^{(i)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Gaussian Discriminant Analysis
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+Using 
+\begin_inset Formula $p(y|x)=\frac{p(x|y)p(y)}{p(x)}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(y=1|x;\phi,\Sigma,\mu_{-1},\mu_{1})=\frac{p(x|y=1)p(y=1)}{p(x|y=1)p(y=1)+p(x|y=-1)p(y=-1)}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\frac{\exp\left(-\frac{1}{2}(x-\mu_{1})^{T}\Sigma^{-1}(x-\mu_{1})\right)\phi}{\exp\left(-\frac{1}{2}(x-\mu_{1})^{T}\Sigma^{-1}(x-\mu_{1})\right)\phi+\exp\left(-\frac{1}{2}(x-\mu_{-1})^{T}\Sigma^{-1}(x-\mu_{-1})\right)(1-\phi)}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\frac{1}{1+\exp\left(\frac{1}{2}(x-\mu_{1})^{T}\Sigma^{-1}(x-\mu_{1})-\frac{1}{2}(x-\mu_{-1})^{T}\Sigma^{-1}(x-\mu_{-1})\right)\frac{1-\phi}{\phi}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{2}(x-\mu_{1})^{T}\Sigma^{-1}(x-\mu_{1})-\frac{1}{2}(x-\mu_{-1})^{T}\Sigma^{-1}(x-\mu_{-1})=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula 
+\[
+=\frac{1}{2}\left(x^{T}\Sigma^{-1}x-\mu_{1}^{T}\Sigma^{-1}x-x^{T}\Sigma^{-1}\mu_{1}+\mu_{1}^{T}\Sigma^{-1}\mu_{1}-x^{T}\Sigma^{-1}x+\mu_{-1}^{T}\Sigma^{-1}x+x^{T}\Sigma^{-1}\mu_{-1}-\mu_{-1}^{T}\Sigma^{-1}\mu_{-1}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And since 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ is symmetric, with term cancellation,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{2}\left(-2\mu_{1}^{T}\Sigma^{-1}x+2\mu_{-1}^{T}\Sigma^{-1}x+\left(\mu_{1}^{T}\Sigma^{-1}\mu_{1}-\mu_{-1}^{T}\Sigma^{-1}\mu_{-1}\right)\right)=\left((\mu_{-1}-\mu_{1})^{T}\Sigma^{-1}\right)x+\frac{\left(\mu_{1}^{T}\Sigma^{-1}\mu_{1}-\mu_{-1}^{T}\Sigma^{-1}\mu_{-1}\right)}{2}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\left(\Sigma^{-1}(\mu_{-1}-\mu_{1})\right)^{T}x+\frac{\left(\mu_{1}^{T}\Sigma^{-1}\mu_{1}-\mu_{-1}^{T}\Sigma^{-1}\mu_{-1}\right)}{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And the original expression is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{1+\exp\left(-1\left(\left(\Sigma^{-1}(\mu_{1}-\mu_{-1})\right)^{T}x-\frac{\left(\mu_{1}^{T}\Sigma^{-1}\mu_{1}-\mu_{-1}^{T}\Sigma^{-1}\mu_{-1}\right)}{2}-\log\left(\frac{1-\phi}{\phi}\right)\right)\right)}=p(y=1|x;\phi,\Sigma,\mu_{-1},\mu_{1})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The expression for 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $p(y=-1|x;\phi,\Sigma,\mu_{-1},\mu_{1}),$
+\end_inset
+
+ will just be 
+\begin_inset Formula $1-p(y=1|x;\phi,\Sigma,\mu_{-1},\mu_{1})$
+\end_inset
+
+, and since the expression has a logistic form, it will just flip the sign
+ in the exponential.
+ Expressed with the variable y, the result is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(y|x;\phi,\Sigma,\mu_{-1},\mu_{1})=\frac{1}{1+\exp\left(-y\left(\left(\Sigma^{-1}(\mu_{1}-\mu_{-1})\right)^{T}x-\frac{\left(\mu_{1}^{T}\Sigma^{-1}\mu_{1}-\mu_{-1}^{T}\Sigma^{-1}\mu_{-1}\right)}{2}-\log\left(\frac{1-\phi}{\phi}\right)\right)\right)}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\frac{1}{1+\exp\left(-y\left(\theta^{T}x+\theta_{0}\right)\right)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $\theta=\Sigma^{-1}(\mu_{1}-\mu_{-1})$
+\end_inset
+
+ and 
+\begin_inset Formula $\theta_{0}=-\frac{\left(\mu_{1}^{T}\Sigma^{-1}\mu_{1}-\mu_{-1}^{T}\Sigma^{-1}\mu_{-1}\right)}{2}-\log\left(\frac{1-\phi}{\phi}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+l=\sum_{i=1}^{m}\log\frac{1}{(2\pi)^{1/2}}-\log\sigma-\frac{1}{2\sigma^{2}}(x^{(i)}-\mu_{y^{(i)}})^{2}+\log p(y^{(i)}|\phi)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Maximizing 
+\begin_inset Formula $\phi$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+The relevant term is 
+\begin_inset Formula $\sum_{i=1}^{m}\log p(y^{(i)}|\phi)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(y|\phi)=1\{y=1\}\phi+1\{y=-1\}(1-\phi)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial p(y|\phi)}{\partial\phi}=1\{y=1\}-1\{y=-1\}=y
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial l}{\partial\phi}=\sum_{i=1}^{m}\frac{\frac{\partial p(y|\phi)}{\partial\phi}}{p(y|\phi)}=\sum_{i=1}^{m}\frac{y^{(i)}}{1\{y^{(i)}=1\}\phi+1\{y^{(i)}=-1\}(1-\phi)}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}1\{y^{(i)}=1\}/\phi-1\{y^{(i)}=-1\}/(1-\phi)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\sum_{i=1}^{m}1\{y^{(i)}=1\}\right)/\phi=\left(\sum_{i=1}^{m}1\{y^{(i)}=-1\}\right)/(1-\phi)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\sum_{i=1}^{m}1\{y^{(i)}=1\}\right)(1-\phi)=\left(\sum_{i=1}^{m}1\{y^{(i)}=-1\}\right)\phi
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\sum_{i=1}^{m}1\{y^{(i)}=1\}\right)=\left(\sum_{i=1}^{m}1\{y^{(i)}=-1\}+1\{y^{(i)}=1\}\right)\phi=m\phi
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\phi=\frac{1}{m}\sum_{i=1}^{m}1\{y^{(i)}=1\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Maximizing 
+\begin_inset Formula $\sigma$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+The revelant terms are 
+\begin_inset Formula $\sum_{i=1}^{m}-\log\sigma-\frac{1}{2\sigma^{2}}(x^{(i)}-\mu_{y^{(i)}})^{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial l}{\partial\sigma}=\sum_{i=1}^{m}-\frac{1}{\sigma}+\frac{(x^{(i)}-\mu_{y^{(i)}})^{2}}{\sigma^{3}}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}-\sigma^{2}+(x^{(i)}-\mu_{y^{(i)}})^{2}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+m\sigma^{2}=\sum_{i=1}^{m}(x^{(i)}-\mu_{y^{(i)}})^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sigma^{2}=\frac{1}{m}\sum_{i=1}^{m}(x^{(i)}-\mu_{y^{(i)}})^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Maximizing 
+\begin_inset Formula $\mu_{\alpha}$
+\end_inset
+
+ where 
+\begin_inset Formula $\alpha\in\{1,-1\}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+The relevant term is 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\sum_{i=1}^{m}-\frac{1}{2\sigma^{2}}(x^{(i)}-\mu_{y^{(i)}})^{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial l}{\partial\mu_{\alpha}}=\sum_{i=1}^{m}\frac{1}{\sigma^{2}}(x^{(i)}-\mu_{y^{(i)}})1\{y^{(i)}=\alpha\}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}(x^{(i)}1\{y^{(i)}=\alpha\}-\mu_{y^{(i)}}1\{y^{(i)}=\alpha\})=\sum_{i=1}^{m}(x^{(i)}1\{y^{(i)}=\alpha\}-\mu_{\alpha}1\{y^{(i)}=\alpha\})=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu_{\alpha}\sum_{i=1}^{m}1\{y^{(i)}=\alpha\}=\sum_{i=1}^{m}x^{(i)}1\{y^{(i)}=\alpha\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu_{\alpha}=\frac{\sum_{i=1}^{m}1\{y^{(i)}=\alpha\}x^{(i)}}{\sum_{i=1}^{m}1\{y^{(i)}=\alpha\}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Linear invariance of optimization algorithms
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+The update rule in Newton's method is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x\leftarrow x-H^{-1}\nabla f(x)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given an 
+\begin_inset Formula $x^{(i)}$
+\end_inset
+
+ it will be updated to 
+\begin_inset Formula $x^{(i+1)}=x^{(i)}-H_{x}^{-1}|_{x^{(i)}}\nabla_{x}f(x^{(i)})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Using 
+\begin_inset Formula $g(z)=f(Az)=f(x(z))$
+\end_inset
+
+, then minimizing g wrt z looks like
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+z^{(i+1)}=z^{(i)}-H_{z}^{-1}|_{z^{(i)}}\nabla_{z}g(z^{(i)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+Matrix Calculus Identities with Proofs
+\end_layout
+
+\begin_layout Standard
+Use the notation 
+\begin_inset Formula $f(\boldsymbol{x})$
+\end_inset
+
+ as short for 
+\begin_inset Formula $f(x_{1},x_{2},...,x_{N})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subparagraph
+Identity for Gradient:
+\end_layout
+
+\begin_layout Standard
+The gradient of 
+\begin_inset Formula $g$
+\end_inset
+
+ wrt 
+\begin_inset Formula $\boldsymbol{z}$
+\end_inset
+
+ in terms of the gradient of 
+\begin_inset Formula $f$
+\end_inset
+
+ wrt 
+\begin_inset Formula $\boldsymbol{x}$
+\end_inset
+
+ is 
+\begin_inset Formula $\boldsymbol{\nabla_{z}}g(\boldsymbol{z})=\boldsymbol{A}^{T}\boldsymbol{\nabla_{x}}f|_{\boldsymbol{x}=\boldsymbol{Az}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subparagraph*
+Proof:
+\end_layout
+
+\begin_layout Standard
+Given
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f(\boldsymbol{x})=f(\boldsymbol{x}(\boldsymbol{z}))=g(\boldsymbol{z})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x_{i}=\sum_{k}A_{ik}z_{k}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We have the partials of f: 
+\begin_inset Formula $\partial f/\partial x_{i}$
+\end_inset
+
+; and of g: 
+\begin_inset Formula $\partial g/\partial z_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To express the partials of g in terms of the partials of f, use the multivariate
+ chain rule:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left[\boldsymbol{\nabla}_{\boldsymbol{z}}g\right]_{j}=\frac{\partial g}{\partial z_{j}}=\sum_{i}\frac{\partial f}{\partial x_{i}}(\boldsymbol{x}(\boldsymbol{z}))\frac{\partial x_{i}}{\partial z_{j}}=\sum_{i}\frac{\partial f}{\partial x_{i}}(\boldsymbol{x}(\boldsymbol{z}))\frac{\partial\left(\sum_{k}A_{ik}z_{k}\right)}{\partial z_{j}}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i}\frac{\partial f}{\partial x_{i}}(\boldsymbol{x}(\boldsymbol{z}))\sum_{k}A_{ik}\delta_{kj}=\sum_{i}\frac{\partial f}{\partial x_{i}}(\boldsymbol{x}(\boldsymbol{z}))A_{ij}=\sum_{i}(A^{T})_{ji}\frac{\partial f}{\partial x_{i}}(\boldsymbol{x}(\boldsymbol{z}))=\left[A^{T}\nabla_{x}f(\boldsymbol{x}(\boldsymbol{z}))\right]_{j}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\left[\boldsymbol{A}^{T}\boldsymbol{\nabla}_{\boldsymbol{x}}f|_{\boldsymbol{x=}\boldsymbol{A}\boldsymbol{z}}\right]_{j}
+\]
+
+\end_inset
+
+ Proof end.
+\end_layout
+
+\begin_layout Subparagraph*
+Identity for Hessian:
+\end_layout
+
+\begin_layout Standard
+The hessian of 
+\begin_inset Formula $g$
+\end_inset
+
+ wrt 
+\begin_inset Formula $\boldsymbol{z}$
+\end_inset
+
+ in terms of the hessian of 
+\begin_inset Formula $f$
+\end_inset
+
+ wrt 
+\begin_inset Formula $\boldsymbol{x}$
+\end_inset
+
+ is 
+\begin_inset Formula $\boldsymbol{H}_{g(\boldsymbol{z})}(\boldsymbol{z})=\boldsymbol{A}^{T}\boldsymbol{H}_{f(\boldsymbol{x})}|_{\boldsymbol{x}=\boldsymbol{Az}}\boldsymbol{A}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subparagraph*
+Proof:
+\end_layout
+
+\begin_layout Standard
+Using the result from the previous proof: 
+\begin_inset Formula $\frac{\partial g}{\partial z_{j}}=\sum_{i}\frac{\partial f}{\partial x_{i}}(\boldsymbol{x}(\boldsymbol{z}))A_{ij}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left[\boldsymbol{H}_{g(\boldsymbol{z})}\right]_{jl}=\frac{\partial}{\partial z_{l}}\left(\frac{\partial g}{\partial z_{j}}\right)=\frac{\partial}{\partial z_{l}}\left(\sum_{i}\frac{\partial f}{\partial x_{i}}(\boldsymbol{x}(\boldsymbol{z}))A_{ij}\right)=\sum_{i}A_{ij}\frac{\partial}{\partial z_{l}}\left(\frac{\partial f}{\partial x_{i}}(\boldsymbol{x}(\boldsymbol{z}))\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i}A_{ij}\sum_{p}\frac{\partial^{2}f}{\partial x_{i}\partial x_{p}}(\boldsymbol{x}(\boldsymbol{z}))\frac{\partial x_{p}}{\partial z_{l}}=\sum_{i}A_{ij}\sum_{p}\frac{\partial^{2}f}{\partial x_{i}\partial x_{p}}(\boldsymbol{x}(\boldsymbol{z}))\frac{\partial(\sum_{q}A_{pq}z_{q})}{\partial z_{l}}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i}A_{ij}\sum_{p}\frac{\partial^{2}f}{\partial x_{i}\partial x_{p}}(\boldsymbol{x}(\boldsymbol{z}))\sum_{q}A_{pq}\delta_{ql}=\sum_{i}A_{ij}\sum_{p}\frac{\partial^{2}f}{\partial x_{i}\partial x_{p}}(\boldsymbol{x}(\boldsymbol{z}))A_{pl}=\sum_{i}\sum_{p}\left[\boldsymbol{A}^{T}\right]{}_{ji}\left[\boldsymbol{H}_{f(\boldsymbol{x})}|_{\boldsymbol{x=Az}}\right]_{ip}\left[\boldsymbol{A}\right]_{pl}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\left[\boldsymbol{A}^{T}\boldsymbol{H}_{f(\boldsymbol{x})}|_{\boldsymbol{x=Az}}\boldsymbol{A}\right]_{jl}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Proof end.
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $\boldsymbol{z}^{(i)}=\boldsymbol{A}^{-1}\boldsymbol{x}^{(i)}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+Then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\boldsymbol{z}^{(i+1)}=\boldsymbol{z}^{(i)}-\boldsymbol{H}_{g(\boldsymbol{z})}^{-1}|_{\boldsymbol{z}=\boldsymbol{z}^{(i)}}\boldsymbol{\nabla}_{\boldsymbol{z}}g(\boldsymbol{z}^{(i)})=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\boldsymbol{z}^{(i)}-\left(\boldsymbol{A}^{T}\boldsymbol{H}_{f(\boldsymbol{x})}|_{\boldsymbol{x}=\boldsymbol{A}\boldsymbol{z}^{(i)}}\boldsymbol{A}\right)^{-1}\left(\boldsymbol{A}^{T}\boldsymbol{\nabla}_{\boldsymbol{x}}f|_{\boldsymbol{x}=\boldsymbol{A}\boldsymbol{z}^{(i)}}\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\boldsymbol{z}^{(i)}-\boldsymbol{A}^{-1}\boldsymbol{H}_{f(\boldsymbol{x})}^{-1}|_{\boldsymbol{x}=\boldsymbol{A}\boldsymbol{z}^{(i)}}\boldsymbol{A}^{-T}\boldsymbol{A}^{T}\boldsymbol{\nabla}_{\boldsymbol{x}}f|_{\boldsymbol{x}=\boldsymbol{A}\boldsymbol{z}^{(i)}}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\boldsymbol{A}^{-1}\boldsymbol{x}^{(i)}-\boldsymbol{A}^{-1}\boldsymbol{H}_{f(\boldsymbol{x})}^{-1}|_{\boldsymbol{x}=\boldsymbol{x}^{(i)}}\boldsymbol{\nabla_{x}}f|_{\boldsymbol{x}=\boldsymbol{x}^{(i)}}=\boldsymbol{A}^{-1}\left(\boldsymbol{x}^{(i)}-\boldsymbol{H}_{f(\boldsymbol{x})}^{-1}|_{\boldsymbol{x}=\boldsymbol{x}^{(i)}}\boldsymbol{\nabla_{x}}f|_{\boldsymbol{x}=\boldsymbol{x}^{(i)}}\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\boldsymbol{A}^{-1}\boldsymbol{x}^{(i+1)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And Newton's method is invariant to linear reparametrizations.
+\end_layout
+
+\begin_layout Subsection*
+(b) 
+\end_layout
+
+\begin_layout Standard
+Using the gradient descent rule:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x^{(i+1)}=x^{(i)}-\alpha\nabla_{x}f(x^{(i)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And with 
+\begin_inset Formula $z^{(i)}=A^{-1}x^{(i)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+z^{(i+1)}=z^{(i)}-\alpha\nabla_{z}g(z^{(i)})=z^{(i)}-\alpha\boldsymbol{A}^{T}\boldsymbol{\nabla_{x}}f|_{\boldsymbol{x}=\boldsymbol{Az}^{(i)}}=A^{-1}x^{(i)}-A^{T}\alpha\nabla_{x}f(x^{(i)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Gradient descent is not invariant to linear parametrization, unless the
+ matrix A has the property that 
+\begin_inset Formula $A^{-1}=A^{T}$
+\end_inset
+
+, which is not true in general.
+\end_layout
+
+\begin_layout Section
+Regression for denoising quasar spectra
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Subsubsection*
+(i) 
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\boldsymbol{y}=[y^{(1)};y^{(2)};...;y^{(m)}]$
+\end_inset
+
+ (a column vector of size m), 
+\begin_inset Formula $\boldsymbol{X}=[x_{0}^{(1)},x_{1}^{(1)},...,x_{n}^{(1)};x_{0}^{(2)},x_{1}^{(2)},...,x_{n}^{(2)};...;x_{0}^{(m)},x_{1}^{(m)},...,x_{n}^{(m)}]$
+\end_inset
+
+ (an m by (n+1) matrix), and 
+\begin_inset Formula $\boldsymbol{\theta}=[\theta_{0};\theta_{1};...;\theta_{n}]$
+\end_inset
+
+ (a column vector of size n+1).
+\end_layout
+
+\begin_layout Standard
+Then 
+\begin_inset Formula 
+\[
+J(\boldsymbol{\theta})=\sum_{i=1}^{m}\frac{w^{(i)}}{2}\left(\boldsymbol{\theta}^{T}\boldsymbol{x}^{(i)}-y^{(i)}\right)^{2}=\sum_{i=1}^{m}\frac{w^{(i)}}{2}\left(\left[\boldsymbol{X\theta}\right]^{(i)}-y^{(i)}\right)^{2}=\sum_{i=1}^{m}\left(\left[\boldsymbol{X\theta}\right]^{(i)}-y^{(i)}\right)\frac{w^{(i)}}{2}\left(\left[\boldsymbol{X\theta}\right]^{(i)}-y^{(i)}\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i=1}^{m}\boldsymbol{\left[X\theta-y\right]}^{(i)}\frac{w^{(i)}}{2}\boldsymbol{\left[X\theta-y\right]}^{(i)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given a vector 
+\begin_inset Formula $[a_{1};a_{2};...;a_{k}]$
+\end_inset
+
+ and 
+\begin_inset Formula $[b_{1};b_{2};...;b_{k}]$
+\end_inset
+
+, the vector 
+\begin_inset Formula $[a_{1}b_{1};a_{2}b_{2};...;a_{k}b_{k}]$
+\end_inset
+
+ can be constructed by multiplying 
+\begin_inset Formula 
+\[
+\text{diag}\left(\left[\begin{array}{c}
+a_{1}\\
+a_{2}\\
+a_{3}\\
+\vdots\\
+a_{k}
+\end{array}\right]\right)\left[\begin{array}{c}
+b_{1}\\
+b_{2}\\
+b_{3}\\
+\vdots\\
+b_{k}
+\end{array}\right]=\left[\begin{array}{ccccc}
+a_{1} & 0 & 0 & \cdots & 0\\
+0 & a_{2} & 0 & \cdots & 0\\
+0 & 0 & a_{3} & \cdots & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+0 & 0 & 0 & \cdots & a_{k}
+\end{array}\right]\left[\begin{array}{c}
+b_{1}\\
+b_{2}\\
+b_{3}\\
+\vdots\\
+b_{k}
+\end{array}\right]=\left[\begin{array}{c}
+a_{1}b_{1}\\
+a_{2}b_{2}\\
+a_{3}b_{3}\\
+\vdots\\
+a_{k}b_{k}
+\end{array}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+J(\boldsymbol{\theta})=\sum_{i=1}^{m}\boldsymbol{\left[X\theta-y\right]}^{(i)}\left[\boldsymbol{W}\boldsymbol{\left[X\theta-y\right]}\right]^{(i)}=\left(\boldsymbol{X\theta}-\boldsymbol{y}\right)^{T}\boldsymbol{W}\left(\boldsymbol{X\theta}-\boldsymbol{y}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $\boldsymbol{W}=\frac{1}{2}\text{diag}\left([w^{(1)};w^{(2)};...;w^{(m)}]\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+(ii)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial}{\partial\theta_{l}}J(\boldsymbol{\theta})=\frac{1}{2}\sum_{i=1}^{m}w^{(i)}2(\boldsymbol{\theta}^{T}\boldsymbol{x}^{(i)}-y^{(i)})\frac{\partial}{\partial\theta_{l}}\left(\sum_{j}\theta_{j}x_{j}^{(i)}\right)=\sum_{i=1}^{m}w^{(i)}(\boldsymbol{\theta}^{T}\boldsymbol{x}^{(i)}-y^{(i)})x_{l}^{(i)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\boldsymbol{\theta}}J(\boldsymbol{\theta})=\sum_{i=1}^{m}w^{(i)}(\boldsymbol{\theta}^{T}\boldsymbol{x}^{(i)}-y^{(i)})\boldsymbol{x}^{(i)}=2(\boldsymbol{X}\boldsymbol{\theta}-\boldsymbol{y})^{T}\boldsymbol{W}\boldsymbol{X}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+(\boldsymbol{X}\boldsymbol{\theta}-\boldsymbol{y})^{T}(\boldsymbol{W}\boldsymbol{X})=0\implies(\boldsymbol{WX})^{T}(\boldsymbol{X\theta}-\boldsymbol{y})=0\implies\boldsymbol{X}^{T}\boldsymbol{W}\boldsymbol{X}\boldsymbol{\theta}=\boldsymbol{X}^{T}\boldsymbol{W}\boldsymbol{y}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The value of 
+\begin_inset Formula $\boldsymbol{\theta}$
+\end_inset
+
+ that minimizes 
+\begin_inset Formula $J(\boldsymbol{\theta})$
+\end_inset
+
+ is 
+\begin_inset Formula $(\boldsymbol{X}^{T}\boldsymbol{W}\boldsymbol{X})^{-1}\boldsymbol{X}^{T}\boldsymbol{W}\boldsymbol{y}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+(iii)
+\end_layout
+
+\begin_layout Standard
+The log likelihood is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+L(\boldsymbol{y}|\boldsymbol{X};\boldsymbol{\theta})=\sum_{i=1}^{m}L(y^{(i)}|\boldsymbol{x}^{(i)};\boldsymbol{\theta})=\sum_{i=1}^{m}-\log\left(\sqrt{2\pi}\sigma^{(i)}\right)-\frac{\left(\boldsymbol{y}^{(i)}-\boldsymbol{\theta}^{T}\boldsymbol{x}^{(i)}\right)^{2}}{2\left(\sigma^{(i)}\right)^{2}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then maximizing L with respect to 
+\begin_inset Formula $\boldsymbol{\theta}$
+\end_inset
+
+ is equivalent to minimizing 
+\begin_inset Formula $J(\boldsymbol{\theta})$
+\end_inset
+
+ where
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+J(\boldsymbol{\theta})=\frac{1}{2}\sum_{i=1}^{m}\frac{\left(\boldsymbol{y}^{(i)}-\boldsymbol{\theta}^{T}\boldsymbol{x}^{(i)}\right)^{2}}{\left(\sigma^{(i)}\right)^{2}}=\frac{1}{2}\sum_{i=1}^{m}w^{(i)}\left(\boldsymbol{y}^{(i)}-\boldsymbol{\theta}^{T}\boldsymbol{x}^{(i)}\right)^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $w^{(i)}=1/(\sigma^{(i)})^{2}$
+\end_inset
+
+, which is the same as locally weighted linear regression given the values
+ of w in terms of 
+\begin_inset Formula $\sigma$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Subsubsection*
+(i)
+\end_layout
+
+\begin_layout Standard
+Used the normal equations:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\boldsymbol{\theta}=\left(\boldsymbol{X}^{T}\boldsymbol{X}\right)^{-1}\boldsymbol{X}^{T}\boldsymbol{y}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To find (intercept first):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\boldsymbol{\theta}=[2.5134;-0.0010]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename p5_unweighted.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "p5_unweighted.m"
+lstparams "language=Matlab"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+
+(ii)
+\end_layout
+
+\begin_layout Standard
+
+The resulting fit, with 
+\begin_inset Formula $\tau=5$
+\end_inset
+
+ is as follows (implemented with the code below):
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Graphics
+	filename p5_weighted_5.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "p5_weighted.m"
+lstparams "language=Matlab"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+(iii)
+\end_layout
+
+\begin_layout Standard
+The locally weighted linear regression with a small value of 
+\begin_inset Formula $\tau$
+\end_inset
+
+ such as 1, only applies a small amount of smoothing but the shape of the
+ curve closely tracks the individual data points, resulting in too much
+ remaining noise.
+ As 
+\begin_inset Formula $\tau$
+\end_inset
+
+ is increased more and more points in the vicinity of each data point are
+ considered to determine the shape of the local fit and this results in
+ removing the random fluctuations, but can also underestimate the size of
+ a narrow peak.
+ As 
+\begin_inset Formula $\tau$
+\end_inset
+
+ is further increased the curvature of the fit decreases more and more until
+ it is indistinguishable from a nonweighted linear fit.
+\end_layout
+
+\begin_layout Standard
+The resulting fits for various values of 
+\begin_inset Formula $\tau$
+\end_inset
+
+ are as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename 1.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename 10.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename 100.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename 1000.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "p5_four_plots.m"
+lstparams "language=Matlab"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(c)
+\end_layout
+
+\begin_layout Subsubsection*
+(i)
+\end_layout
+
+\begin_layout Standard
+The dataset was smoothed with the following function applied to all rows
+ of the training and testing arrays:
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "smooth_f.m"
+lstparams "language=Matlab"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Applied as such:
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "smooth_all.m"
+lstparams "language=Matlab"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+(ii)
+\end_layout
+
+\begin_layout Standard
+The average training error is 7.5119
+\end_layout
+
+\begin_layout Subsubsection*
+(iii)
+\end_layout
+
+\begin_layout Standard
+The average testing error is 16.6916
+\end_layout
+
+\begin_layout Standard
+The following are the estimated spectra for examples 1 and 6 from the testing
+ set:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename example1.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename example6.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The code for calculating the estimated spectra and average train/test errors
+ is as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "funct_reg.m"
+lstparams "language=Matlab"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
