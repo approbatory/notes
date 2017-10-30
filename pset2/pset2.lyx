@@ -1,0 +1,301 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass extarticle
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\headheight 1in
+\headsep 1in
+\footskip 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Logistic Regression: Training Stability
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+The most notable difference is that dataset A converges in 30385 iterations
+ while dataset B does not seem to converge at all.
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+The cost function for logistic regression is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+J(\theta)=-\frac{1}{m}\sum_{i=1}^{m}\log\sigma(y\theta^{T}x)=-\frac{1}{m}\sum_{i=1}^{m}\log\frac{1}{1+\exp(-y\theta^{T}x)}=\frac{1}{m}\sum_{i=1}^{m}\log(1+\exp(-y\theta^{T}x))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Plotting the values of the parameters in 
+\begin_inset Formula $\theta$
+\end_inset
+
+ for dataset A and B as a function of training iteration, one can see that
+ in A, the values reach an optimal point and stop growing, as J similarly
+ stops decreasing, while in B the values continue growing, as J gets arbitrarily
+ close to 0.
+ This hints that dataset B is causing the algorithm to try to make the 
+\begin_inset Formula $h_{\theta}$
+\end_inset
+
+function closer and closer to a step function, but increasing the total
+ magnitude of 
+\begin_inset Formula $\theta$
+\end_inset
+
+, while A is not doing so.
+ The only situation where a step function would be appropriate is when there
+ is absolute certainty about the separation: i.e.
+ when the model does not observe any data points leading to an error.
+ By plotting the linear separations achieved in datasets A and B, it is
+ clear that while dataset A still has exceptions, or mistakes, and therefore
+ converges on a finite level of certainty, dataset B has no mistakes under
+ the linear separator, and therefore the algorithm increases the level of
+ certainty encoded in the magnitude of 
+\begin_inset Formula $\theta$
+\end_inset
+
+ ad infinitum without numerical convergence.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename p1b_setA.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename p1b_setB.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename p1b_J_A.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename p1b_J_B.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename p1b_sepA.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename p1b_sepB.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(c)
+\end_layout
+
+\begin_layout Paragraph*
+(i)
+\end_layout
+
+\begin_layout Standard
+No.
+ Using a different constant learning rate will not solve the converge problem
+ as it does not penalize increasing 
+\begin_inset Formula $\|\theta\|$
+\end_inset
+
+, but will increase it in more or less iterations to the same values.
+\end_layout
+
+\begin_layout Paragraph*
+(ii)
+\end_layout
+
+\begin_layout Standard
+No, but code may assume convergence has occurred.
+ Using a proper scaling factor over time may reduce the update to 
+\begin_inset Formula $\theta$
+\end_inset
+
+ to less than the minimal numerical threshold and may cause the code to
+ assume that convergence occurred, even though the actual gradient is not
+ approaching zero.
+\end_layout
+
+\begin_layout Paragraph*
+(iii)
+\end_layout
+
+\begin_layout Standard
+Yes.
+ This will penalize large values for 
+\begin_inset Formula $\theta$
+\end_inset
+
+ and eventually the benefit to the term of J without regularization will
+ not outweigh the penalty in the regularization term and convergence will
+ occur.
+\end_layout
+
+\begin_layout Paragraph*
+(iv)
+\end_layout
+
+\begin_layout Standard
+No.
+ Linear scaling of the input features will not change the fact that dataset
+ B is perfectly linearly seperable and the problem will persist, and greater
+ 
+\begin_inset Formula $\theta$
+\end_inset
+
+ values will still lead to lower J.
+\end_layout
+
+\begin_layout Paragraph*
+(v)
+\end_layout
+
+\begin_layout Standard
+Possibly.
+ If the added noise causes one of the labels to 
+\begin_inset Quotes eld
+\end_inset
+
+flip
+\begin_inset Quotes erd
+\end_inset
+
+, or one of the input features to shift such that the data is no longer
+ perfectly seperable, then dataset B will become like A and will converge.
+\end_layout
+
+\begin_layout Subsection*
+(d)
+\end_layout
+
+\begin_layout Standard
+SVMs using the hinge loss will not be vulnerable to datasets like B, even
+ if they do not use the regularization term proportional to 
+\begin_inset Formula $\|w\|^{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The reason is that is if the parameters 
+\begin_inset Formula $w$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ are set to correspond to a separation line such that the line is within
+ the margin between the two classes of data points and the parameters are
+ large enough such that 
+\begin_inset Formula $y(w\cdot x-b)>1$
+\end_inset
+
+, then the hinge loss will evaluate to 0 on all the points and the algorithm
+ will halt since small changes to w or b are not able to further reduce
+ the value of the cost function.
+\end_layout
+
+\end_body
+\end_document
