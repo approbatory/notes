@@ -67,6 +67,14 @@
 
 \begin_body
 
+\begin_layout Title
+Problem Set #2
+\end_layout
+
+\begin_layout Author
+Omer Hazon
+\end_layout
+
 \begin_layout Section
 Logistic Regression: Training Stability
 \end_layout
@@ -91,7 +99,7 @@ The cost function for logistic regression is:
 \begin_layout Standard
 \begin_inset Formula 
 \[
-J(\theta)=-\frac{1}{m}\sum_{i=1}^{m}\log\sigma(y\theta^{T}x)=-\frac{1}{m}\sum_{i=1}^{m}\log\frac{1}{1+\exp(-y\theta^{T}x)}=\frac{1}{m}\sum_{i=1}^{m}\log(1+\exp(-y\theta^{T}x))
+J(\theta)=-\frac{1}{m}\sum_{i=1}^{m}\log\sigma(y^{(i)}\theta^{T}x^{(i)})=-\frac{1}{m}\sum_{i=1}^{m}\log\frac{1}{1+\exp(-y^{(i)}\theta^{T}x^{(i)})}=\frac{1}{m}\sum_{i=1}^{m}\log(1+\exp(-y^{(i)}\theta^{T}x^{(i)}))
 \]
 
 \end_inset
@@ -295,6 +303,1295 @@ The reason is that is if the parameters
 , then the hinge loss will evaluate to 0 on all the points and the algorithm
  will halt since small changes to w or b are not able to further reduce
  the value of the cost function.
+\end_layout
+
+\begin_layout Section
+Model Calibration
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+Since all outputs of 
+\begin_inset Formula $h_{\theta}$
+\end_inset
+
+are between 0 and 1, we may include all training examples in the equation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}P\left(y^{(i)}=1\mid x^{(i)};\theta\right)\stackrel{?}{=}\frac{1}{m}\sum_{i=1}^{m}\boldsymbol{1}\{y^{(i)}=1\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}\frac{1}{1+\exp(-\theta^{T}x^{(i)})}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+J(\theta)=\frac{1}{m}\sum_{i=1}^{m}-y^{(i)}\log h_{\theta}(x^{(i)})-(1-y^{(i)})\log(1-h_{\theta}(x^{(i)}))=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}y^{(i)}\log(1+\exp(-\theta^{T}x^{(i)}))+(1-y^{(i)})\log(1+\exp(\theta^{T}x^{(i)}))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\theta$
+\end_inset
+
+ is defined as the minimum of J.
+ Finding the gradient and setting it to zero gives:
+\end_layout
+
+\begin_layout Standard
+(Using 
+\begin_inset Formula $\frac{d}{dx}(\log(1+exp(x)))=\sigma(x)=1/(1+\exp(-x))$
+\end_inset
+
+, and 
+\begin_inset Formula $1-\sigma(x)=\sigma(-x)$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla J(\theta)=\frac{1}{m}\sum_{i=1}^{m}y^{(i)}\sigma(-\theta^{T}x^{(i)})(-x^{(i)})+(1-y^{(i)})\sigma(\theta^{T}x^{(i)})x^{(i)}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Changing 
+\begin_inset Formula $\sigma(-\theta^{T}x^{(i)})$
+\end_inset
+
+ to 
+\begin_inset Formula $1-\sigma(\theta^{T}x^{(i)})$
+\end_inset
+
+ and taking only the 
+\begin_inset Formula $0^{th}$
+\end_inset
+
+ component of the gradient, that is, the one of the bias parameter, where
+ 
+\begin_inset Formula $x_{0}^{(i)}=1$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}y^{(i)}(1-\sigma(\theta^{T}x^{(i)}))(-1)+(1-y^{(i)})\sigma(\theta^{T}x^{(i)})1=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}-y^{(i)}+y^{(i)}\sigma(\theta^{T}x^{(i)})+(1-y^{(i)})\sigma(\theta^{T}x^{(i)})=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}y^{(i)}\sigma(\theta^{T}x^{(i)})+(1-y^{(i)})\sigma(\theta^{T}x^{(i)})=\frac{1}{m}\sum_{i=1}^{m}y^{(i)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}\sigma(\theta^{T}x^{(i)})=\frac{1}{m}\sum_{i=1}^{m}y^{(i)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}P(y^{(i)}=1\mid x^{(i)};\theta)=\frac{1}{m}\sum_{i=1}^{m}\boldsymbol{1}\{y^{(i)}=1\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This shows that when 
+\begin_inset Formula $\theta$
+\end_inset
+
+ is the minimum of J, and includes a bias term, that setting the partial
+ of J with respect to the bias parameter to be zero is equivalent to stating
+ that the model is well-calibrated on (0,1).
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+Consider a binary classification situation where the data has labels of
+ 0 or 1 completely independently of its features, at a ratio of 1:1.
+ That is, each example will be a 1 with a 50% probability independent of
+ any features.
+ A binary classifier based on the constant function of 0.5, that is, the
+ probabilities coming out of the classifier are always 0.5, will be perfectly
+ calibrated with the data.
+ This model is unable to achieve perfect accuracy, and will have an accuracy
+ of 0.5, a counterexample to the claim made in the problem.
+\end_layout
+
+\begin_layout Standard
+The converse, that a model with perfect accuracy will be perfectly calibrated
+ is also not true.
+ Consider a dataset in which the only given feature is identical to the
+ class label, and a binary classifier which gives a 0.51 when the label is
+ 1 and a 0.49 when the label is 0.
+ In the range of 0.509 to 0.511 the average probability is 0.51, but the average
+ class label is 1, which is not well calibrated despite being perfectly
+ accurate (0.51 > 0.5 is interpreted as saying that 1 is most likely, and
+ 0.49 < 0.5 is interpreted as saying that 0 is most likely).
+\end_layout
+
+\begin_layout Subsection*
+(c)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $L_{2}$
+\end_inset
+
+ regularization introduces the term 
+\begin_inset Formula $\lambda\frac{1}{2}\|\theta\|^{2}$
+\end_inset
+
+ to the cost function J, as well as the term 
+\begin_inset Formula $\lambda\theta$
+\end_inset
+
+ to the gradient.
+ Taking the equation resulting from taking the 
+\begin_inset Formula $0^{th}$
+\end_inset
+
+ term of the gradient from part (a) and inserting the regularization gradient
+ term, (the 
+\begin_inset Formula $0^{th}$
+\end_inset
+
+component of which is 
+\begin_inset Formula $\lambda\theta_{0}$
+\end_inset
+
+):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}\left(y^{(i)}(1-\sigma(\theta^{T}x^{(i)}))(-1)+(1-y^{(i)})\sigma(\theta^{T}x^{(i)})1\right)+\lambda\theta_{0}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}\left(y^{(i)}(1-\sigma(\theta^{T}x^{(i)}))(-1)+(1-y^{(i)})\sigma(\theta^{T}x^{(i)})1\right)=-\lambda\theta_{0}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{m}\sum_{i=1}^{m}P(y^{(i)}=1\mid x^{(i)};\theta)=-\lambda\theta_{0}+\frac{1}{m}\sum_{i=1}^{m}\boldsymbol{1}\{y^{(i)}=1\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The average probability over (0,1) will be shifted from the average label
+ by 
+\begin_inset Formula $-\lambda\theta_{0}$
+\end_inset
+
+.
+ By constraining the freedom to choose an arbitrarily large 
+\begin_inset Formula $\theta_{0}$
+\end_inset
+
+, regularization pushes the model away from well-calibratedness.
+\end_layout
+
+\begin_layout Section
+Bayesian Logistic Regression and weight decay
+\end_layout
+
+\begin_layout Standard
+Maximize the logs instead of the probabilities directly:
+\end_layout
+
+\begin_layout Standard
+Then, 
+\begin_inset Formula $\theta_{ML}$
+\end_inset
+
+ maximizes
+\begin_inset Formula 
+\[
+f_{ML}(\theta)=\sum_{i=1}^{m}y^{(i)}\log h_{\theta}(x^{(i)})+(1-y^{(i)})\log(1-h_{\theta}(x^{(i)}))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And 
+\begin_inset Formula $\theta_{MAP}$
+\end_inset
+
+ maximizes an additional term of 
+\begin_inset Formula $\log(p(\theta))=-\frac{1}{2\tau^{2}}\|\theta\|_{2}^{2}+\text{const.}$
+\end_inset
+
+, corresponding to L2 regularization.
+ 
+\begin_inset Formula $\theta_{MAP}$
+\end_inset
+
+ maximizes
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f_{MAP}(\theta)=-\frac{1}{2\tau^{2}}\|\theta\|_{2}^{2}+f_{ML}(\theta)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Assume temporarily that 
+\begin_inset Formula $\|\theta_{MAP}\|_{2}>\|\theta_{ML}\|_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Then 
+\begin_inset Formula $\theta_{ML}$
+\end_inset
+
+ provides a larger value for the regularization term than 
+\begin_inset Formula $\theta_{MAP}$
+\end_inset
+
+, as well as providing a 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Delta(\theta):=f_{ML}(\theta)-f_{MAP}(\theta)=\frac{1}{2\tau^{2}}\|\theta\|_{2}^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\Delta(\theta_{MAP})>\Delta(\theta_{ML})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f_{ML}(\theta_{MAP})-f_{MAP}(\theta_{MAP})>f_{ML}(\theta_{ML})-f_{MAP}(\theta_{ML})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f_{ML}(\theta_{MAP})+f_{MAP}(\theta_{ML})>f_{MAP}(\theta_{MAP})+f_{ML}(\theta_{ML})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+However, since 
+\begin_inset Formula $\theta_{ML},\theta_{MAP}$
+\end_inset
+
+ are maxima of their appropriate functions,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f_{MAP}(\theta_{MAP})>f_{MAP}(\theta_{ML})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f_{ML}(\theta_{ML})>f_{ML}(\theta_{MAP})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Summing the two inequalities:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+f_{MAP}(\theta_{MAP})+f_{ML}(\theta_{ML})>f_{MAP}(\theta_{ML})+f_{ML}(\theta_{MAP})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Which is the direct contradiction of the previous equation.
+ Therefore the assumption that 
+\begin_inset Formula $\|\theta_{MAP}\|_{2}>\|\theta_{ML}\|_{2}$
+\end_inset
+
+ is false, and 
+\begin_inset Formula $\|\theta_{MAP}\|_{2}\le\|\theta_{ML}\|_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Constructing Kernels
+\end_layout
+
+\begin_layout Standard
+Let the matrix form 
+\begin_inset Formula $\boldsymbol{K}$
+\end_inset
+
+ for any 
+\begin_inset Quotes eld
+\end_inset
+
+kernel candidate function
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset Formula $K(x,z)$
+\end_inset
+
+ be the matrix of 
+\begin_inset Formula $K_{ij}=K(x^{(i)},x^{(j)})$
+\end_inset
+
+ constructed from an arbitrary set 
+\begin_inset Formula $\{x^{(i)}\}_{i=1}^{m}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+(a) Yes
+\end_layout
+
+\begin_layout Standard
+Symmetric: 
+\begin_inset Formula $K(z,x)=K_{1}(z,x)+K_{2}(z,x)=K_{1}(x,z)+K_{2}(x,z)=K(x,z)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Pos.
+ Semidef.: 
+\begin_inset Formula $\forall b\in\mathbb{R}^{m}$
+\end_inset
+
+, 
+\begin_inset Formula $b^{T}\boldsymbol{K}b=b^{T}\boldsymbol{K}_{1}b+b^{T}\boldsymbol{K}_{2}b$
+\end_inset
+
+ both terms are 
+\begin_inset Formula $\ge0$
+\end_inset
+
+ so their sum is too.
+\end_layout
+
+\begin_layout Standard
+K is necessarily a kernel.
+\end_layout
+
+\begin_layout Subsection*
+(b) No
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $K_{1}$
+\end_inset
+
+be a constant 0 function (which is a kernel, by symmetry and positive semidefini
+te conditions), and 
+\begin_inset Formula $K_{2}$
+\end_inset
+
+ be a linear kernel, then 
+\begin_inset Formula $K=K_{1}-K_{2}=-K_{2}$
+\end_inset
+
+ will be symmetric and negative semidefinite:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $K(x,x)=-\|x\|^{2}$
+\end_inset
+
+(some diagonal element in the matrix of 
+\begin_inset Formula $K_{ij}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+K is not necessarily a kernel.
+\end_layout
+
+\begin_layout Subsection*
+(c) Yes
+\end_layout
+
+\begin_layout Standard
+Symmetric: 
+\begin_inset Formula $K(z,x)=aK_{1}(z,x)=aK_{1}(x,z)=K(x,z)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Pos.
+ Semidef.:
+\begin_inset Formula $\forall b\in\mathbb{R}^{m}$
+\end_inset
+
+, 
+\begin_inset Formula $b^{T}\boldsymbol{K}b=ab^{T}\boldsymbol{K}_{1}b\ge0$
+\end_inset
+
+ since 
+\begin_inset Formula $K_{1}$
+\end_inset
+
+is pos.
+ semidef.
+ and 
+\begin_inset Formula $a$
+\end_inset
+
+ is positive.
+\end_layout
+
+\begin_layout Subsection*
+(d) No
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $K_{1}$
+\end_inset
+
+be the linear kernel: then 
+\begin_inset Formula $K(x,x)=-a\|x\|^{2}\le0$
+\end_inset
+
+ since the L2 norm is positive or zero, and a is positive.
+\end_layout
+
+\begin_layout Subsection*
+(e) Yes
+\end_layout
+
+\begin_layout Standard
+Symmetric: 
+\begin_inset Formula $K(z,x)=K_{1}(z,x)K_{2}(z,x)=K_{1}(x,z)K_{2}(x,z)=K(x,z)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Pos.
+ Semidef.: 
+\begin_inset Formula $\forall b\in\mathbb{R}^{m},b^{T}\boldsymbol{K}b=b^{T}(\boldsymbol{K}_{1}\circ\boldsymbol{K}_{2})b=tr(diag(b)\boldsymbol{K}_{1}diag(b)\boldsymbol{K}_{2})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where the circle denotes a Hadamard (pointwise) product.
+\end_layout
+
+\begin_layout Standard
+The last step above can be proven as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+b^{T}(\boldsymbol{K}_{1}\circ\boldsymbol{K}_{2})b=\sum_{i=1}^{m}\sum_{j=1}^{m}b_{i}(\boldsymbol{K}_{2}\circ\boldsymbol{K}_{1})_{ij}b_{j}=\sum_{i=1}^{m}\sum_{j=1}^{m}b_{i}K_{2ij}K_{1ij}b_{j}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}\sum_{j=1}^{m}(diag(b)\boldsymbol{K}_{2})_{ij}(\boldsymbol{K}_{1}diag(b))_{ij}=tr((diag(b)\boldsymbol{K}_{2})^{T}(\boldsymbol{K}_{1}diag(b)))=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+tr((\boldsymbol{K}_{1}diag(b))^{T}(diag(b)\boldsymbol{K}_{2}))=tr(diag(b)\boldsymbol{K}_{1}diag(b)\boldsymbol{K}_{2})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $\boldsymbol{K}_{1}$
+\end_inset
+
+and 
+\begin_inset Formula $\boldsymbol{K}_{2}$
+\end_inset
+
+ are positive semidefinite, and symmetric, they have matrix square-roots
+ defined by the eigenvalue decomposition (which is guaranteed to exist by
+ their symmetry):
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\boldsymbol{K}_{1}=\sum_{i=1}^{m}k_{1}^{(i)}\vec{v}_{1}^{(i)}\vec{v}_{1}^{(i)T}$
+\end_inset
+
+, and 
+\begin_inset Formula $\boldsymbol{K}_{2}=\sum_{i=1}^{m}k_{2}^{(i)}\vec{v}_{2}^{(i)}\vec{v}_{2}^{(i)T}$
+\end_inset
+
+, where the eigenvalues are nonnegative due to the positive semidefinite
+ conditions.
+ Then the matrix square roots are:
+\begin_inset Formula 
+\[
+\sqrt{\boldsymbol{K}_{1}}=\sum_{i=1}^{m}\sqrt{k_{1}^{(i)}}\vec{v}_{1}^{(i)}\vec{v}_{1}^{(i)T},\sqrt{\boldsymbol{K}_{2}}=\sum_{i=1}^{m}\sqrt{k_{2}^{(i)}}\vec{v}_{2}^{(i)}\vec{v}_{2}^{(i)T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And since the matrix trace is invariant to cyclic permutations of the factors
+ within it:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\forall b\in\mathbb{R}^{m},b^{T}\boldsymbol{K}b=b^{T}(\boldsymbol{K}_{1}\circ\boldsymbol{K}_{2})b=tr(\sqrt{\boldsymbol{K}_{2}}diag(b)\sqrt{\boldsymbol{K}_{1}}\sqrt{\boldsymbol{K}_{1}}diag(b)\sqrt{\boldsymbol{K}_{2}})=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $tr(\boldsymbol{M}^{T}\boldsymbol{M})$
+\end_inset
+
+ where 
+\begin_inset Formula $\boldsymbol{M}=\sqrt{\boldsymbol{K}_{1}}diag(b)\sqrt{\boldsymbol{K}_{2}}$
+\end_inset
+
+.
+ And since 
+\begin_inset Formula $tr(\boldsymbol{A}^{T}\boldsymbol{B})$
+\end_inset
+
+ is the well known Frobenius inner product between matrices A and B, it
+ follows that 
+\begin_inset Formula $b^{T}\boldsymbol{K}b=tr(\boldsymbol{M}^{T}\boldsymbol{M})\ge0$
+\end_inset
+
+ and is positive semidefinite.
+\end_layout
+
+\begin_layout Subsection*
+(f) Yes
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $K(x,z)=f(x)f(z)$
+\end_inset
+
+ is identical to choosing a one-dimensional output 
+\begin_inset Formula $\phi$
+\end_inset
+
+ function and having its inner product as the kernel.
+\end_layout
+
+\begin_layout Standard
+Symmetric: 
+\begin_inset Formula $K(z,x)=f(z)f(x)=f(x)f(z)=K(x,z)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Pos.
+ Semidef.: 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\forall b\in\mathbb{R}^{m},b^{T}\boldsymbol{K}b=\sum_{i=1}^{m}\sum_{j=1}^{m}b_{i}f(x^{(i)})f(x^{(j)})b_{j}=$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\sum_{i=1}^{m}b_{i}f(x^{(i)})\right)\left(\sum_{i=1}^{m}b_{i}f(x^{(i)})\right)=\left(\sum_{i=1}^{m}b_{i}f(x^{(i)})\right)^{2}\ge0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(g) Yes
+\end_layout
+
+\begin_layout Standard
+Given that 
+\begin_inset Formula $\boldsymbol{K}_{3}$
+\end_inset
+
+ is symmetric and pos.
+ semidef.
+\end_layout
+
+\begin_layout Standard
+Symmetric: 
+\begin_inset Formula $K(z,x)=K_{3}(\phi(z),\phi(x))=K_{3}(\phi(x),\phi(z))=K(x,z)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Pos.
+ Semidef.: 
+\begin_inset Formula $\forall b\in\mathbb{R}^{m},b^{T}\boldsymbol{K}b=\sum_{i=1}^{m}\sum_{j=1}^{m}b_{i}K_{3}(\phi(x^{(i)}),\phi(x^{(j)}))b_{j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\boldsymbol{K}_{3}$
+\end_inset
+
+ is positive semidefinite when constructed using any finite set of vectors
+ in 
+\begin_inset Formula $\mathbb{R}^{d}$
+\end_inset
+
+, including the set 
+\begin_inset Formula $\{v^{(i)}:=\phi(x^{(i)})\}_{i=1}^{m}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $\sum_{i=1}^{m}\sum_{j=1}^{m}b_{i}K_{3}(\phi(x^{(i)}),\phi(x^{(j)}))b_{j}=\sum_{i=1}^{m}\sum_{j=1}^{m}b_{i}K_{3}(v^{(i)},v^{(j)})b_{j}=b^{T}\boldsymbol{K}_{3}b\ge0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+(h) Yes
+\end_layout
+
+\begin_layout Standard
+Using the result from (e) that products of kernels are kernels, and from
+ (c) that positive scalar multiplications of kernels are kernels, and from
+ (a) that sums of kernels are kernels, it follows therefore, since polynomials
+ with positive coefficients are sums of products of a value with itself
+ (and 1, which is a kernel too) times a positive coefficient, that these
+ positive coeffiecient polynomials of a kernel 
+\begin_inset Formula $K_{1}(x,z)$
+\end_inset
+
+ are themselves kernels.
+\end_layout
+
+\begin_layout Standard
+1 is a kernel since it is symmetric and 
+\begin_inset Formula $b^{T}1b=b^{T}b\ge0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Given kernel 
+\begin_inset Formula $K_{1}$
+\end_inset
+
+, and assuming that 
+\begin_inset Formula $K_{1}^{n}$
+\end_inset
+
+ is a kernel, then 
+\begin_inset Formula $K_{1}^{n+1}$
+\end_inset
+
+ is a product of kernel 
+\begin_inset Formula $K_{1}$
+\end_inset
+
+ and kernel 
+\begin_inset Formula $K_{1}^{n}$
+\end_inset
+
+ and by (e) it is a kernel as well.
+ 
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $1=K_{1}^{0}$
+\end_inset
+
+, and by induction, 
+\begin_inset Formula $K_{1}^{n}$
+\end_inset
+
+ is a kernel for any whole number n.
+\end_layout
+
+\begin_layout Standard
+By (c) 
+\begin_inset Formula $a_{n}K_{1}^{n}$
+\end_inset
+
+ is a kernel for 
+\begin_inset Formula $a_{n}>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+By repeated application of (a), 
+\begin_inset Formula $\sum_{n=0}^{\text{degree}(p)}a_{n}K_{1}^{n}=p(K_{1})$
+\end_inset
+
+ is a kernel as well.
+ And so for any polynomial p with positive coefficients, 
+\begin_inset Formula $p(K_{1})$
+\end_inset
+
+ is a kernel.
+\end_layout
+
+\begin_layout Section
+Kernelizing the Perceptron
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+Represent 
+\begin_inset Formula $\theta^{(i)}$
+\end_inset
+
+ in terms of the input vectors that have been encountered up to step (i):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\theta^{(i)}=\sum_{j=1}^{i}\beta_{j}\phi(x^{(j)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The initial value, 
+\begin_inset Formula $\theta^{(0)}$
+\end_inset
+
+ would then be represented implicitly as the zero vector in the vector space
+ of the range of 
+\begin_inset Formula $\phi(\cdot)$
+\end_inset
+
+, and can be done by initializing all 
+\begin_inset Formula $\beta$
+\end_inset
+
+ values to 0.
+ The parameters are then the 
+\begin_inset Formula $\beta$
+\end_inset
+
+ values.
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+A prediction on a new input 
+\begin_inset Formula $\phi(x^{(i+1)})$
+\end_inset
+
+ is done using the representation found in (a):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+h_{\theta^{(i)}}(x^{(i+1)})=g\left(\theta^{(i)T}\phi(x^{(i+1)})\right)=g\left(\sum_{j=1}^{i}\beta_{j}\phi(x^{(j)})^{T}\phi(x^{(i+1)})\right)=g\left(\sum_{j=1}^{i}\beta_{j}K(x^{(j)},x^{(i+1)})\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(c)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\theta^{(i+1)}:=\theta^{(i)}+\alpha\boldsymbol{1}\left\{ g\left(\theta^{(i)T}\phi(x^{(i+1)})\right)y^{(i+1)}<0\right\} y^{(i+1)}\phi(x^{(i+1)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Will become:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\beta_{i+1}\phi(x^{(i+1)})+\sum_{j=1}^{i}\beta_{j}\phi(x^{(j)}):=\sum_{j=1}^{i}\beta_{j}\phi(x^{(j)})+\alpha\boldsymbol{1}\left\{ g\left(\sum_{j=1}^{i}\beta_{j}K(x^{(j)},x^{(i+1)})\right)y^{(i+1)}<0\right\} y^{(i+1)}\phi(x^{(i+1)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Which can be changed to:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\beta_{i+1}\phi(x^{(i+1)}):=\alpha\boldsymbol{1}\left\{ g\left(\sum_{j=1}^{i}\beta_{j}K(x^{(j)},x^{(i+1)})\right)y^{(i+1)}<0\right\} y^{(i+1)}\phi(x^{(i+1)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And further removing 
+\begin_inset Formula $\phi(x^{(i+1)})$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\beta_{i+1}:=\alpha\boldsymbol{1}\left\{ g\left(\sum_{j=1}^{i}\beta_{j}K(x^{(j)},x^{(i+1)})\right)y^{(i+1)}<0\right\} y^{(i+1)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thereby removing any explicit use of 
+\begin_inset Formula $\phi$
+\end_inset
+
+ and having everything be in terms of K.
+\end_layout
+
+\begin_layout Section
+Spam classification
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+The implementation of multinomial naive Bayes counts the total fraction
+ of spam and nonspam documents and sets these to be the prior probabilities,
+ keeping in mind that Laplace smoothing means that there is one pseudocount
+ of spam and one of nonspam in addition to the real counts of the labels.
+ The probabilities of the multinomial model are found by looking only at
+ the subset of the training data labeled 'spam' and counting the frequencies
+ of each token in that subset, then dividing by the total number of words
+ seen in that subset to get an array of probabilities summing to 1 for a
+ multinomial distribution, with Laplace smoothing done assuming an additional
+ pseudocount for each token.
+ A similar operation is done for the 'nonspam' subset.
+\end_layout
+
+\begin_layout Standard
+On the test set, each document is classified by the formula
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(\text{spam}\mid\boldsymbol{x})\propto p(\boldsymbol{x}\mid\text{spam})p(\text{spam})\propto\left(\prod_{j=1}^{n}p_{(\text{spam})j}^{x_{j}}\right)p(\text{spam})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(\text{nonspam}\mid\boldsymbol{x})\propto p(\boldsymbol{x}\mid\text{nonspam})p(\text{nonspam})\propto\left(\prod_{j=1}^{n}p_{(\text{nonspam})j}^{x_{j}}\right)p(\text{nonspam})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Or in the log-domain
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\log p(\text{spam}\mid\boldsymbol{x})+const.=\left(\sum_{j=1}^{n}x_{j}\log p_{(\text{spam})j}\right)+\log p(\text{spam})=L_{\text{spam}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\log p(\text{nonspam}\mid\boldsymbol{x})+const.=\left(\sum_{j=1}^{n}x_{j}\log p_{(\text{nonspam})j}\right)+\log p(\text{nonspam})=L_{\text{nonspam}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $L_{\text{spam}}>L_{\text{nonspam}}$
+\end_inset
+
+ then the document is classified as spam, otherwise it is classified as
+ nonspam.
+ The test error is: 0.01625.
+ The code is as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "spam_data/nb_train.m"
+lstparams "caption={Naive Bayes training},language=Matlab"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "spam_data/nb_test.m"
+lstparams "caption={Naive Bayes test},language=Matlab"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+The topmost 'spammy' tokens are:
+\end_layout
+
+\begin_layout Standard
+{'httpaddr'} {'spam'} {'unsubscrib'} {'ebai'} {'valet'}
+\end_layout
+
+\begin_layout Standard
+In descending order.
+ They were found by subtracting the log-probabilities of words in the nonspam
+ class from those of the spam class, and taking the five indices with the
+ highest value, then looking for their associated tokens in 'tokenlist'.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Matlab"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+%% where c is log-prob.
+ of spam class, and d is log-prob of nonspam class 
+\end_layout
+
+\begin_layout Plain Layout
+
+[~, inds] = sort(c - d, 'descend');
+\end_layout
+
+\begin_layout Plain Layout
+
+tokens = strsplit(tokenlist);
+\end_layout
+
+\begin_layout Plain Layout
+
+display(tokens(inds(1:5)));
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(c)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename p6_learning_curve.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The highest training set size on the curve, (1400) gave the lowest test
+ error 0.01625.
+\end_layout
+
+\begin_layout Subsection*
+(d)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename p6_SVM_learning_curve.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The plot shows the training errors of the SVM for each amount of training
+ samples.
+\end_layout
+
+\begin_layout Subsection*
+(e)
+\end_layout
+
+\begin_layout Standard
+The SVM learns far more rapidly than naive Bayes based on test set error
+ and reaches perfect accuracy on the given data compared with naive Bayes
+ which gets stuck at ~0.016 error.
 \end_layout
 
 \end_body
