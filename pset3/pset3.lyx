@@ -69,6 +69,14 @@
 
 \begin_body
 
+\begin_layout Title
+Problem Set #3
+\end_layout
+
+\begin_layout Author
+Omer Hazon
+\end_layout
+
 \begin_layout Section
 A Simple Neural Network
 \end_layout
@@ -860,7 +868,11 @@ If you assume that the total distribution has the form of a multivariate
 \end_layout
 
 \begin_layout Standard
-In summary, the mean vector is:
+In summary, the mean vector is (using the ordering 
+\begin_inset Formula $[x,y,z]^{T}$
+\end_inset
+
+):
 \end_layout
 
 \begin_layout Standard
@@ -916,7 +928,32 @@ Taking the conditional over
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\mu_{y^{(pr)},z^{(pr)}\mid x^{(pr)}}=\mu_{y^{(pr)},z^{(pr)}}+\Sigma_{\left(y^{(pr)},z^{(pr)}\right),x^{(pr)}}\Sigma_{x^{(pr)},x^{(pr)}}^{-1}\left(x^{(pr)}-\mu_{x^{(pr)}}\right)
+Q_{pr}(y^{(pr)},z^{(pr)})=\det(2\pi\bar{\Sigma})^{-1/2}\exp\left(-\frac{1}{2}(\left[\begin{array}{c}
+y^{(pr)}\\
+z^{(pr)}
+\end{array}\right]-\bar{\mu})^{T}\bar{\Sigma}^{-1}(\left[\begin{array}{c}
+y^{(pr)}\\
+z^{(pr)}
+\end{array}\right]-\bar{\mu})\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+With 
+\begin_inset Formula $\bar{\mu},\bar{\Sigma}$
+\end_inset
+
+ defined by:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\bar{\mu}:=\mu_{y^{(pr)},z^{(pr)}\mid x^{(pr)}}=\mu_{y^{(pr)},z^{(pr)}}+\Sigma_{\left(y^{(pr)},z^{(pr)}\right),x^{(pr)}}\Sigma_{x^{(pr)},x^{(pr)}}^{-1}\left(x^{(pr)}-\mu_{x^{(pr)}}\right)
 \]
 
 \end_inset
@@ -944,7 +981,7 @@ Taking the conditional over
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\Sigma_{\left(y^{(pr)},z^{(pr)}\right)\mid x^{(pr)}}=\Sigma_{\left(y^{(pr)},z^{(pr)}\right),\left(y^{(pr)},z^{(pr)}\right)}-\Sigma_{\left(y^{(pr)},z^{(pr)}\right),x^{(pr)}}\Sigma_{x^{(pr)},x^{(pr)}}^{-1}\Sigma_{x^{(pr)},\left(y^{(pr)},z^{(pr)}\right)}
+\bar{\Sigma}:=\Sigma_{\left(y^{(pr)},z^{(pr)}\right)\mid x^{(pr)}}=\Sigma_{\left(y^{(pr)},z^{(pr)}\right),\left(y^{(pr)},z^{(pr)}\right)}-\Sigma_{\left(y^{(pr)},z^{(pr)}\right),x^{(pr)}}\Sigma_{x^{(pr)},x^{(pr)}}^{-1}\Sigma_{x^{(pr)},\left(y^{(pr)},z^{(pr)}\right)}
 \]
 
 \end_inset
@@ -1172,7 +1209,7 @@ Partial derivative with respect to
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\sum_{r}\sum_{p}\left(\tilde{\mu}_{p}+\frac{\tilde{\sigma}_{p}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}-\mu_{p}\right)\boldsymbol{1}\{p'=p\}=0
+\sum_{r}\sum_{p}\frac{1}{\sigma_{p}^{2}}\left(\tilde{\mu}_{p}+\frac{\tilde{\sigma}_{p}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}-\mu_{p}\right)\boldsymbol{1}\{p'=p\}=0
 \]
 
 \end_inset
@@ -1183,7 +1220,7 @@ Partial derivative with respect to
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\sum_{r}\left(\tilde{\mu}_{p'}+\frac{\tilde{\sigma}_{p'}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p'})}{\sigma^{2}+\tilde{\sigma}_{p'}^{2}+\tilde{\tau}_{r}^{2}}-\mu_{p'}\right)=0
+\frac{1}{\sigma_{p'}^{2}}\sum_{r}\left(\tilde{\mu}_{p'}+\frac{\tilde{\sigma}_{p'}^{2}(x^{(p'r)}-\tilde{\nu}_{r}-\tilde{\mu}_{p'})}{\sigma^{2}+\tilde{\sigma}_{p'}^{2}+\tilde{\tau}_{r}^{2}}-\mu_{p'}\right)=0
 \]
 
 \end_inset
@@ -1194,7 +1231,18 @@ Partial derivative with respect to
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\mu_{p'}=\frac{1}{R}\sum_{r}\left(\tilde{\mu}_{p'}+\frac{\tilde{\sigma}_{p'}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p'})}{\sigma^{2}+\tilde{\sigma}_{p'}^{2}+\tilde{\tau}_{r}^{2}}\right)
+\sum_{r}\left(\tilde{\mu}_{p'}+\frac{\tilde{\sigma}_{p'}^{2}(x^{(p'r)}-\tilde{\nu}_{r}-\tilde{\mu}_{p'})}{\sigma^{2}+\tilde{\sigma}_{p'}^{2}+\tilde{\tau}_{r}^{2}}-\mu_{p'}\right)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu_{p'}=\frac{1}{R}\sum_{r}\left(\tilde{\mu}_{p'}+\frac{\tilde{\sigma}_{p'}^{2}(x^{(p'r)}-\tilde{\nu}_{r}-\tilde{\mu}_{p'})}{\sigma^{2}+\tilde{\sigma}_{p'}^{2}+\tilde{\tau}_{r}^{2}}\right)
 \]
 
 \end_inset
@@ -1218,25 +1266,309 @@ And reindexing from p' to p:
 \end_layout
 
 \begin_layout Standard
+\begin_inset Formula 
+\[
+\mu_{p}=\tilde{\mu}_{p}+\frac{1}{R}\sum_{r=1}^{R}\left(\frac{\tilde{\sigma}_{p}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}\right)
+\]
+
+\end_inset
+
 
 \end_layout
 
 \begin_layout Standard
-//WRONGIt can be easily seen that the optimal values for 
+Partial derivative with respect to 
+\begin_inset Formula $\nu_{r'}$
+\end_inset
+
+, set to 0:
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula 
+\[
+\sum_{p}\sum_{r}\frac{1}{\tau_{r}^{2}}\left(-2\left(\tilde{\nu}_{r}+\frac{\tilde{\tau}_{r}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}-\nu_{r}\right)\boldsymbol{1}\{r'=r\}\right)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{p}\sum_{r}\frac{1}{\tau_{r}^{2}}\left(\tilde{\nu}_{r}+\frac{\tilde{\tau}_{r}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}-\nu_{r}\right)\boldsymbol{1}\{r'=r\}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{\tau_{r'}^{2}}\sum_{p}\left(\tilde{\nu}_{r'}+\frac{\tilde{\tau}_{r'}^{2}(x^{(pr')}-\tilde{\nu}_{r'}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r'}^{2}}-\nu_{r'}\right)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{p}\left(\tilde{\nu}_{r'}+\frac{\tilde{\tau}_{r'}^{2}(x^{(pr')}-\tilde{\nu}_{r'}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r'}^{2}}-\nu_{r'}\right)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nu_{r'}=\frac{1}{P}\sum_{p=1}^{P}\left(\tilde{\nu}_{r'}+\frac{\tilde{\tau}_{r'}^{2}(x^{(pr')}-\tilde{\nu}_{r'}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r'}^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And reindexing from r' to r:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nu_{r}=\frac{1}{P}\sum_{p=1}^{P}\left(\tilde{\nu}_{r}+\frac{\tilde{\tau}_{r}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nu_{r}=\tilde{\nu}_{r}+\frac{1}{P}\sum_{p=1}^{P}\left(\frac{\tilde{\tau}_{r}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Partial derivative with respect to 
+\begin_inset Formula $\sigma_{p'}^{2}$
+\end_inset
+
+, set to 0:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{p}\sum_{r}\boldsymbol{1}\{p'=p\}\left[\frac{1}{\sigma_{p}^{2}}-\frac{1}{\sigma_{p}^{4}}\left(\tilde{\sigma}_{p}^{2}-\frac{\tilde{\sigma}_{p}^{4}}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}+\left(\tilde{\mu}_{p}+\frac{\tilde{\sigma}_{p}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}-\mu_{p}\right)^{2}\right)\right]=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{r}\left(\frac{1}{\sigma_{p'}^{2}}-\frac{1}{\sigma_{p'}^{4}}\left(\tilde{\sigma}_{p'}^{2}-\frac{\tilde{\sigma}_{p'}^{4}}{\sigma^{2}+\tilde{\sigma}_{p'}^{2}+\tilde{\tau}_{r}^{2}}+\left(\tilde{\mu}_{p'}+\frac{\tilde{\sigma}_{p'}^{2}(x^{(p'r)}-\tilde{\nu}_{r}-\tilde{\mu}_{p'})}{\sigma^{2}+\tilde{\sigma}_{p'}^{2}+\tilde{\tau}_{r}^{2}}-\mu_{p'}\right)^{2}\right)\right)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{r}\left(\sigma_{p'}^{2}-\left(\tilde{\sigma}_{p'}^{2}-\frac{\tilde{\sigma}_{p'}^{4}}{\sigma^{2}+\tilde{\sigma}_{p'}^{2}+\tilde{\tau}_{r}^{2}}+\left(\tilde{\mu}_{p'}+\frac{\tilde{\sigma}_{p'}^{2}(x^{(p'r)}-\tilde{\nu}_{r}-\tilde{\mu}_{p'})}{\sigma^{2}+\tilde{\sigma}_{p'}^{2}+\tilde{\tau}_{r}^{2}}-\mu_{p'}\right)^{2}\right)\right)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sigma_{p'}^{2}=\frac{1}{R}\sum_{r=1}^{R}\left(\tilde{\sigma}_{p'}^{2}-\frac{\tilde{\sigma}_{p'}^{4}}{\sigma^{2}+\tilde{\sigma}_{p'}^{2}+\tilde{\tau}_{r}^{2}}+\left(\tilde{\mu}_{p'}+\frac{\tilde{\sigma}_{p'}^{2}(x^{(p'r)}-\tilde{\nu}_{r}-\tilde{\mu}_{p'})}{\sigma^{2}+\tilde{\sigma}_{p'}^{2}+\tilde{\tau}_{r}^{2}}-\mu_{p'}\right)^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And reindexing from p' to p:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sigma_{p}^{2}=\frac{1}{R}\sum_{r=1}^{R}\left(\tilde{\sigma}_{p}^{2}-\frac{\tilde{\sigma}_{p}^{4}}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}+\left(\tilde{\mu}_{p}+\frac{\tilde{\sigma}_{p}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}-\mu_{p}\right)^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sigma_{p}^{2}=\tilde{\sigma}_{p}^{2}+\frac{1}{R}\sum_{r=1}^{R}\left(-\frac{\tilde{\sigma}_{p}^{4}}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}+\left(\frac{\tilde{\sigma}_{p}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}-(\mu_{p}-\tilde{\mu}_{p})\right)^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
 \begin_inset Formula $\mu_{p}$
 \end_inset
 
- and 
+ is the new value derived before.
+\end_layout
+
+\begin_layout Standard
+Partial derivative with respect to 
+\begin_inset Formula $\tau_{r'}^{2}$
+\end_inset
+
+, set to 0:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{p}\sum_{r}\boldsymbol{1}\{r'=r\}\left[\frac{1}{\tau_{r}^{2}}-\frac{1}{\tau_{r}^{4}}\left(\tilde{\tau}_{r}^{2}-\frac{\tilde{\tau}_{r}^{4}}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}+\left(\tilde{\nu}_{r}+\frac{\tilde{\tau}_{r}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}-\nu_{r}\right)^{2}\right)\right]=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{p}\left(\frac{1}{\tau_{r'}^{2}}-\frac{1}{\tau_{r'}^{4}}\left(\tilde{\tau}_{r'}^{2}-\frac{\tilde{\tau}_{r'}^{4}}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r'}^{2}}+\left(\tilde{\nu}_{r'}+\frac{\tilde{\tau}_{r'}^{2}(x^{(pr')}-\tilde{\nu}_{r'}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r'}^{2}}-\nu_{r'}\right)^{2}\right)\right)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula 
+\[
+\sum_{p}\left(\tau_{r'}^{2}-\left(\tilde{\tau}_{r'}^{2}-\frac{\tilde{\tau}_{r'}^{4}}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r'}^{2}}+\left(\tilde{\nu}_{r'}+\frac{\tilde{\tau}_{r'}^{2}(x^{(pr')}-\tilde{\nu}_{r'}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r'}^{2}}-\nu_{r'}\right)^{2}\right)\right)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\tau_{r'}^{2}=\frac{1}{P}\sum_{p=1}^{P}\left(\tilde{\tau}_{r'}^{2}-\frac{\tilde{\tau}_{r'}^{4}}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r'}^{2}}+\left(\tilde{\nu}_{r'}+\frac{\tilde{\tau}_{r'}^{2}(x^{(pr')}-\tilde{\nu}_{r'}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r'}^{2}}-\nu_{r'}\right)^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And reindexing from r' to r:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\tau_{r}^{2}=\frac{1}{P}\sum_{p=1}^{P}\left(\tilde{\tau}_{r}^{2}-\frac{\tilde{\tau}_{r}^{4}}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}+\left(\tilde{\nu}_{r}+\frac{\tilde{\tau}_{r}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}-\nu_{r}\right)^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\tau_{r}^{2}=\tilde{\tau}_{r}^{2}+\frac{1}{P}\sum_{p=1}^{P}\left(-\frac{\tilde{\tau}_{r}^{4}}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}+\left(\frac{\tilde{\tau}_{r}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}-(\nu_{r}-\tilde{\nu}_{r})\right)^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
 \begin_inset Formula $\nu_{_{r}}$
 \end_inset
 
- are those that set the squared expressions to zero, that is:
+ is the new value derived before.
+\end_layout
+
+\begin_layout Standard
+Rewritten in terms of updates to the parameters:
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\mu_{p}=\sum_{r}\left(\tilde{\mu}_{p}+\frac{\tilde{\sigma}_{p}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}\right)
+\Delta\mu_{p}\leftarrow\frac{1}{R}\sum_{r=1}^{R}\left(\frac{\sigma_{p}^{2}(x^{(pr)}-\nu_{r}-\mu_{p})}{\sigma^{2}+\sigma_{p}^{2}+\tau_{r}^{2}}\right)
 \]
 
 \end_inset
@@ -1247,12 +1579,427 @@ And reindexing from p' to p:
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\nu_{r}=\tilde{\nu}_{r}+\frac{\tilde{\tau}_{r}^{2}(x^{(pr)}-\tilde{\nu}_{r}-\tilde{\mu}_{p})}{\sigma^{2}+\tilde{\sigma}_{p}^{2}+\tilde{\tau}_{r}^{2}}
+\Delta\nu_{r}\leftarrow\frac{1}{P}\sum_{p=1}^{P}\left(\frac{\tau_{r}^{2}(x^{(pr)}-\nu_{r}-\mu_{p})}{\sigma^{2}+\sigma_{p}^{2}+\tau_{r}^{2}}\right)
 \]
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sigma_{p}^{2^{(\text{new})}}\leftarrow\sigma_{p}^{2}+\frac{1}{R}\sum_{r=1}^{R}\left(-\frac{\sigma_{p}^{4}}{\sigma^{2}+\sigma_{p}^{2}+\tau_{r}^{2}}+\left(\frac{\sigma_{p}^{2}(x^{(pr)}-\nu_{r}-\mu_{p})}{\sigma^{2}+\sigma_{p}^{2}+\tau_{r}^{2}}-\Delta\mu_{p}\right)^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\tau_{r}^{2^{(\text{new})}}\leftarrow\tau_{r}^{2}+\frac{1}{P}\sum_{p=1}^{P}\left(-\frac{\tau_{r}^{4}}{\sigma^{2}+\sigma_{p}^{2}+\tau_{r}^{2}}+\left(\frac{\tau_{r}^{2}(x^{(pr)}-\nu_{r}-\mu_{p})}{\sigma^{2}+\sigma_{p}^{2}+\tau_{r}^{2}}-\Delta\nu_{r}\right)^{2}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu_{p}^{(\text{new})}\leftarrow\mu_{p}+\Delta\mu_{p}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nu_{r}^{(\text{new})}\leftarrow\nu_{r}+\Delta\nu_{r}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+KL divergence and Maximum Likelihood
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+0=-\log1=-\log\sum_{x}Q(x)=-\log\sum_{x}P(x)\frac{Q(x)}{P(x)}=-\log\mathbb{E}_{P}\frac{Q(x)}{P(x)}\le\mathbb{E}_{P}\left(-\log\frac{Q(x)}{P(x)}\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=-\sum_{x}P(x)\log\frac{Q(x)}{P(x)}=\sum_{x}P(x)\log\frac{P(x)}{Q(x)}=KL(P||Q)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The inequality is due to 
+\begin_inset Formula $-\log(x)$
+\end_inset
+
+ being a convex function and the use of Jensen's inequality, resulting in
+ 
+\begin_inset Formula $KL(P||Q)\ge0$
+\end_inset
+
+ for any P,Q.
+\end_layout
+
+\begin_layout Standard
+Also by Jensen's inequality, is that equality holds if and only if the variable
+ in question, in this case, 
+\begin_inset Formula $Q(x)/P(x)$
+\end_inset
+
+ is a constant.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\forall x,\; Q(x)/P(x)=c
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q(x)=cP(x)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+1=\sum_{x}Q(x)=\sum_{x}cP(x)=c\sum_{x}P(x)=c
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\text{therefore }\forall x,\; Q(x)=P(x)\text{ iff. the equality holds}
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+When the equality holds, 
+\begin_inset Formula $KL(P||Q)=0$
+\end_inset
+
+, and this will occur if and only if P=Q.
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+KL(P(X,Y)||Q(X,Y))=\sum_{y}\sum_{x}P(x,y)\log\frac{P(x,y)}{Q(x,y)}=\sum_{y}\sum_{x}P(x)P(y\mid x)\log\frac{P(x)P(y\mid x)}{Q(x)Q(y\mid x)}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{y}\sum_{x}P(x)P(y\mid x)\log\frac{P(x)}{Q(x)}+\sum_{y}\sum_{x}P(x)P(y\mid x)\log\frac{P(y\mid x)}{Q(y\mid x)}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{x}P(x)\log\frac{P(x)}{Q(x)}\left(\sum_{y}P(y\mid x)\right)+\sum_{x}P(x)\left(\sum_{y}P(y\mid x)\log\frac{P(y\mid x)}{Q(y\mid x)}\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{x}P(x)\log\frac{P(x)}{Q(x)}+\sum_{x}P(x)\left(\sum_{y}P(y\mid x)\log\frac{P(y\mid x)}{Q(y\mid x)}\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=KL(P(X)||Q(X))+KL(P(Y\mid X)||Q(Y\mid X))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(c)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\arg\min_{\theta}KL(\hat{P}||P_{\theta})=\arg\min_{\theta}\sum_{x}\hat{P}(x)\log\frac{\hat{P}(x)}{P_{\theta}(x)}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\arg\min_{\theta}\sum_{x}\left(\hat{P}(x)\log\hat{P}(x)-\hat{P}(x)\log P_{\theta}(x)\right)=\arg\min_{\theta}\sum_{x}\left(-\hat{P}(x)\log P_{\theta}(x)\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\arg\max_{\theta}\sum_{x}\hat{P}(x)\log P_{\theta}(x)=\arg\max_{\theta}\sum_{x}\frac{1}{m}\sum_{i=1}^{m}\boldsymbol{1}\{x^{(i)}=x\}P_{\theta}(x)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\arg\max_{\theta}\frac{1}{m}\sum_{i=1}^{m}\left(\sum_{x}\boldsymbol{1}\{x^{(i)}=x\}P_{\theta}(x)\right)=\arg\max_{\theta}\frac{1}{m}\sum_{i=1}^{m}P_{\theta}(x^{(i)})=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\arg\max_{\theta}\sum_{i=1}^{m}P_{\theta}(x^{(i)})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+K-means for compression
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+Entering:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+A = double(imread('mandrill-large.tiff'));
+\end_layout
+
+\begin_layout Plain Layout
+
+imshow(uint8(round(A)));
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Resulted in displaying the image:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename p5_a.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+K-means with K=16 was implemented and followed the following learning curve:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename distort.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Convergence was reached in 81 iterations (time to convergence may vary due
+ to random initialization).
+\end_layout
+
+\begin_layout Subsection*
+(c)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename mandrill-large.tiff
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is the original image.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename kmeans_image.tiff
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is the image after applying k-means to reduce the amount of colors
+ in it.
+ The image lost some of its crispness, and compression artifacts can be
+ seen in the colors of the eyes, and in the yellowish region on the bottom
+ left that turned into a solid color.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "p5.m"
+lstparams "language=Matlab"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(d)
+\end_layout
+
+\begin_layout Standard
+If the original image had 
+\begin_inset Formula $N$
+\end_inset
+
+ pixels, each represented by 24 bits (8 bits per channel, 3 channels), then
+ the total size is 
+\begin_inset Formula $24N$
+\end_inset
+
+ bits.
+ The compressed image with 16 colors can be represented by a 4 bit number
+ for each pixel, where the numbers from 0 to 15 each represent one of the
+ colors, resulting in 
+\begin_inset Formula $4N$
+\end_inset
+
+ bits.
+ The values of the corresponding colors must be encoded too, 
+\begin_inset Formula $16\times24$
+\end_inset
+
+ bits, but if N is large then this can be neglected in the ratio.
+ The approximate factor is 
+\begin_inset Formula $\frac{24N}{4N}=6$
+\end_inset
+
+.
+ Compression by a factor of 6.
 \end_layout
 
 \end_body
