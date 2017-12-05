@@ -1,0 +1,44 @@
+Title:
+Search for informative coding in neural activity correlations
+
+
+Preliminary Experiments:
+End arm decoding as a function of arm position, with leave 1 out cross-validation:
+	Using Multinomial Naive Bayes
+	Using Linear SVM
+		Without shuffling
+		With shuffling
+
+Further Experiments:
+Finding where single-cell encoding properties are not enough to decode a signal, and identifying which set of cells are responsible for encoding the signal and how.
+New decoding targets:
+	Position decoding with NB & SVM (shuffled & not shuffled)
+	Strategy decoding using the constant path 
+		(with challenges for determining whether the distiction is biological in origin)
+
+Dimensionality reduction for the SVM using PCA
+
+Nonlinear kernels for SVM:
+	Running on dimensionally reduced attributes or on original attributes
+		Quadratic kernel
+			Partially quadratic kernel: Only a subset of attributes have quadratic features
+				Can be done for each pair, determine which pairs result in better performance when quadratic terms between the pairs are allowed
+				Goal is to locate multi-neuron encoding of a variable that is not found to be encoded in a single neuron
+		Gaussian kernel
+	Ablative/Additive analysis: determine the smallest subset of neurons that can be decoded from to get an acceptable estimate of the decoding target:
+		e.g. for properties that are encoded by a single neuron, this subset will contain only that neuron, and the model parameters (a*x+b > 0) are the method of extracting the signal. These can be manually confirmed to be likely biological and not artifactual
+		e.g. for properties that are ensemble encoded, that would be the smallest set (at the very least remove the irrelevant neurons) that could be said to encode the property, and the model parameters are the method of extracting the signal. These should be confirmed, to determine what the "logical relations" are between the cells in the ensemble.
+
+
+==================================================================================================================================================
+Motivation
+This project is an application of machine learning techniques to neural decoding. We analyze a dataset of calcium imaging of neurons from the mouse hippocampus and prefrontal cortex in a freely moving animal performing a decision of making a left or a right turn. We investigate whether the ensemble, or population coding of the neurons contribute more information than each neuron considered independently by applying shuffles across similar trials as a control. Additionally we examine the timeline of the decision-making process analyzing the neural activity recording before the decision can be observed externally.
+Methods
+The dataset comes from an experiment in which mice are trained to perform a simple reinforcement learning task on a 4-armed plus-shaped maze. The four arms are denoted by the four cardinal directions (N,S,E,W). During a trial, the mouse is placed on either the East or West arm, and it is allowed to turn only left or right (into the North or South arms). Only one of the North or South arms is rewarded with a drop of water, while the other is not. The mouse, being water-deprived and seeking the reward, tries to learn the strategy by which it can acquire the reward on each trial. 
+The experiment imposes two different types of strategies: an allocentric strategy, or an egocentric strategy. In the allocentric strategy, only one of the end arms (North or South) is rewarded all the time. That is, to acquire the reward on each trial, the mouse must go to that particular ending arm regardless of whether it started out on the East or the West arm. In the egocentric strategy, to acquire the reward on the end arm, the mouse must have made a specific type of turn (right or left). That is, if a right turn is rewarded, then when the mouse starts on the East arm, it must turn to the North to be rewarded, and when it starts on the West arm, it must turn South. Allocentric (allo) strategies reward a final position, and egocentric (ego) strategies reward a turn type, relative to the body of the mouse. 
+The mouse is first trained to perform a particular strategy, such as an ego left strategy. On the following day the mouse performs the strategy for 100 trials, making a small number of mistakes. On the following day the mouse continues with the ego left strategy, but on trial 50, without cue, the strategy switches to the other strategy type, e.g. allo south, and the mouse must relearn by trial and error to perform the new strategy, until trial 150 when the new strategy is just about acquired. On the following day the new strategy is repeated for 100 trials. This process can be repeated several times. 
+During these three days (strategy 1, strategy 1->strategy 2, strategy 2), an ensemble of neurons (from the hippocampus or medial prefrontal cortex) are imaged using calcium imaging, producing video footage of neurons firing. These videos are processed to extract the calcium imaging signal, which originates in the actual firing patterns of the neurons, from each neuron visible in the video. Each neuron’s fluorescence signal is then further processed to identify events in time when that neuron experiences a high firing rate, in the form of a set of disjoint time intervals and their associated amplitudes. In summary, each day of the experiment yields a set of neurons, each of which has a set of events, each of which has a starting time, and ending time, and an amplitude. The x-y position of the mouse on the maze is recorded for all times.
+    For any particular day of the experiment, for each trial, and for each point in time within the trial, a vector of attributes may be constructed which contains as many dimensions as recorded neurons. The i-th element of the attributes vector contains a zero if no events in the i-th neuron occurred at that time, otherwise it contains the amplitude of the event that occurred.
+    Several ways to construct datasets for machine learning from the aforementioned attribute vectors exist. The simplest way is to pool all the attribute vectors from all trials and all times within those trials. This yields ~10,000 data points, and a possible supervised learning signal is the x-y position at each of those times. Another way is to take one attribute vector from each trial, corresponding to when the mouse was closest to a certain point along the path from beginning arm to end arm. E.g. for each trial find the attribute vector from when the mouse was halfway along the starting arm, or a distance d along the starting arm. This yields ~100 data points. The supervised learning target for this can be the end arm, and the machine learning task is to decode from the neural ensemble before the mouse has began turning what will be the final outcome of the turn, and it can be demonstrated that, typically, the further back in the trial you look, the harder it is to decode the future decision to go north or south (from the hippocampal neural ensemble, see preliminary experiments). These ~100 training examples are not a large dataset, which may cause challenges in training.
+    Since the final goal is to determine to what extent knowing about an ensemble of neurons gives more relevant information than knowing the properties of each neuron independently, this can only be tested using a machine learning algorithm which does not assume independence of its features, i.e. not with naive Bayes methods. The method of choice in this case is SVMs, starting with linear kernels and building complexity cautiously. However, regardless of the method chosen, the procedure for testing whether ensemble properties matter involves a control whereby each attribute is shuffled across training examples within the same class. This transformation would not affect the outcome of a naive Bayes method, but it can affect the outcome of SVMs, worsening their performance.
+

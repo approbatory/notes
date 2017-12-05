@@ -1,0 +1,480 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass extarticle
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Neural Networks
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+Deriving the backprop equations:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta^{[2]}=\nabla_{z^{[2]}}L(\hat{y},y)=\nabla_{\hat{y}}L(\hat{y},y)\circ(g^{[2]})'(z^{[2]})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $L(\hat{y},y)=-\sum_{j=1}^{k}y_{j}\log\hat{y}_{j}$
+\end_inset
+
+, 
+\begin_inset Formula $\partial/\partial\hat{y}_{q}L(\hat{y},y)=-\sum_{j=1}^{k}y_{j}/\hat{y}_{j}(\partial\hat{y}_{j}/\partial\hat{y}_{q})=-\sum_{j=1}^{k}y_{j}/\hat{y}_{j}\boldsymbol{1}\{j=q\}=-y_{q}/\hat{y}_{q}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Meaning that 
+\begin_inset Formula $\nabla_{\hat{y}}L(\hat{y},y)=-y/\hat{y}$
+\end_inset
+
+ (elementwise).
+\end_layout
+
+\begin_layout Standard
+The softmax function related 
+\begin_inset Formula $\hat{y}$
+\end_inset
+
+ to 
+\begin_inset Formula $z^{[2]}$
+\end_inset
+
+, by 
+\begin_inset Formula $\hat{y}_{j}=\exp(z_{j}^{[2]})/\sum_{p=1}^{k}\exp(z_{p}^{[2]})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\partial\hat{y}_{j}/\partial z_{q}^{[2]}=\exp(z_{j}^{[2]})\boldsymbol{1}\{j=q\}/\sum_{p=1}^{k}\exp(z_{p}^{[2]})-\exp(z_{j}^{[2]})/\left(\sum_{p=1}^{k}\exp(z_{p}^{[2]})\right)^{2}\sum_{p=1}^{k}\exp(z_{p}^{[2]})\boldsymbol{1}\{q=p\}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\exp(z_{j}^{[2]})\boldsymbol{1}\{j=q\}/\sum_{p=1}^{k}\exp(z_{p}^{[2]})-\exp(z_{j}^{[2]})\exp(z_{q}^{[2]})/\left(\sum_{p=1}^{k}\exp(z_{p}^{[2]})\right)^{2}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\boldsymbol{1}\{j=q\}\hat{y}_{j}-\hat{y}_{j}\hat{y}_{q}=\hat{y}_{j}(\boldsymbol{1}\{j=q\}-\hat{y}_{q})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\partial/\partial z_{q}^{[2]}L(\hat{y},y)=-\sum_{j=1}^{k}y_{j}/\hat{y}_{j}(\partial\hat{y}_{j}/\partial z_{q}^{[2]})=-\sum_{j=1}^{k}\left(y_{j}/\hat{y}_{j}\right)\hat{y}_{j}(\boldsymbol{1}\{j=q\}-\hat{y}_{q})=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=-\sum_{j=1}^{k}\left(y_{j}\boldsymbol{1}\{j=q\}-y_{j}\hat{y}_{q}\right)=-y_{q}+\hat{y}_{q}\sum_{j=1}^{k}y_{j}=\hat{y}_{q}-y_{q}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left[\delta^{[2]}\right]_{q}=\hat{y}_{q}-y_{q}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{W^{[2]}}J=\delta^{[2]}a^{[1]T}=(\hat{y}-y)h^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{b^{[2]}}J=\delta^{[2]}=(\hat{y}-y)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\delta^{[1]}=(W^{[2]T}\delta^{[2]})\circ g'(z^{[1]})=(W^{[2]T}\delta^{[2]})\circ g(z^{[1]})(1-g(z^{[1]}))=(W^{[2]T}\delta^{[2]})\circ h(1-h)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{W^{[1]}}J=\delta^{[1]}x^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{b^{[1]}}J=\delta^{[1]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As for the regularization term, 
+\begin_inset Formula $\lambda tr(WW^{T})=\lambda\sum_{i}\sum_{j}W_{ij}^{2}$
+\end_inset
+
+, 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\partial/\partial W_{pq}\lambda\sum_{i}\sum_{j}W_{ij}^{2}=\lambda\sum_{i}\sum_{j}2W_{ij}\boldsymbol{1}\{i=p,j=q\}=2\lambda W_{pq}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Or 
+\begin_inset Formula $\nabla_{W}\lambda tr(WW^{T})=2\lambda W$
+\end_inset
+
+, and the weight matrix gradients are updated as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{W^{[2]}}J=\delta^{[2]}a^{[1]T}=(\hat{y}-y)h^{T}+2\lambda W^{[2]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{b^{[2]}}J=\delta^{[2]}=(\hat{y}-y)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{W^{[1]}}J=\delta^{[1]}x^{T}+2\lambda W^{[1]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{b^{[1]}}J=\delta^{[1]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A softmax composed with a cross-entropy loss looks like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+-\frac{1}{B}\sum_{i=1}^{B}\sum_{j=1}^{c}y_{j}^{(i)}\log\hat{y}_{j}^{(i)}=-\frac{1}{B}\sum_{i=1}^{B}\sum_{j=1}^{c}y_{j}^{(i)}\log\left(\frac{\exp z_{j}^{(i)}}{\sum_{p}\exp z_{p}^{(i)}}\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+-\frac{1}{B}\sum_{i=1}^{B}\sum_{j=1}^{c}y_{j}^{(i)}z_{j}^{(i)}-\log\sum_{p=1}^{c}\exp z_{p}^{(i)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+EM Convergence
+\end_layout
+
+\begin_layout Standard
+The fixed point of the M-step looks like:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\theta^{*}=\arg\max_{\theta}\sum_{i}\sum_{z^{(i)}}p(z^{(i)}\mid x^{(i)};\theta^{*})\log\frac{p(x^{(i)},z^{(i)};\theta)}{p(z^{(i)}\mid x^{(i)};\theta^{*})}=\arg\max_{\theta}F(\theta;\theta^{*})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Implying that 
+\begin_inset Formula 
+\[
+\nabla_{\theta}F(\theta;\theta^{*})\mid_{\theta=\theta^{*}}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i}\sum_{z^{(i)}}p(z^{(i)}\mid x^{(i)};\theta^{*})\left[\nabla_{\theta}\log p(x^{(i)},z^{(i)};\theta)\mid_{\theta=\theta^{*}}-\nabla_{\theta}\log p(z^{(i)}\mid x^{(i)};\theta^{*})\right]=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i}\sum_{z^{(i)}}p(z^{(i)}\mid x^{(i)};\theta^{*})\nabla_{\theta}\log p(x^{(i)},z^{(i)};\theta)\mid_{\theta=\theta^{*}}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i}\sum_{z^{(i)}}\frac{p(z^{(i)}\mid x^{(i)};\theta^{*})}{p(x^{(i)},z^{(i)};\theta^{*})}\nabla_{\theta}p(x^{(i)},z^{(i)};\theta)\mid_{\theta=\theta^{*}}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+However, 
+\begin_inset Formula $p(x^{(i)},z^{(i)};\theta^{*})=p(x^{(i)};\theta^{*})p(z^{(i)}\mid x^{(i)};\theta^{*})$
+\end_inset
+
+, resulting in:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i}\sum_{z^{(i)}}\frac{1}{p(x^{(i)};\theta^{*})}\nabla_{\theta}p(x^{(i)},z^{(i)};\theta)\mid_{\theta=\theta^{*}}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i}\frac{1}{p(x^{(i)};\theta^{*})}\nabla_{\theta}\left[\sum_{z^{(i)}}p(x^{(i)},z^{(i)};\theta)\right]_{\theta=\theta^{*}}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i}\frac{1}{p(x^{(i)};\theta^{*})}\nabla_{\theta}p(x^{(i)};\theta)\mid_{\theta=\theta^{*}}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i}\nabla_{\theta}\log p(x^{(i)};\theta)\mid_{\theta=\theta^{*}}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\nabla_{\theta}\left[\sum_{i}\log p(x^{(i)};\theta)\right]{}_{\theta=\theta^{*}}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thereby showing that 
+\begin_inset Formula $\theta^{*}$
+\end_inset
+
+ is a local minimum of the log likelihood 
+\begin_inset Formula $l(\theta)=\sum_{i=1}^{m}\log p(x^{(i)};\theta)$
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document
