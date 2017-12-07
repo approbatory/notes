@@ -476,5 +476,563 @@ Thereby showing that
 .
 \end_layout
 
+\begin_layout Section
+PCA
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{d}{d\alpha}||x-\alpha u||^{2}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{d}{d\alpha}\left((x^{T}-\alpha u^{T})(x-\alpha u)\right)=\frac{d}{d\alpha}\left(x^{T}x-\alpha x^{T}u-\alpha u^{T}x+\alpha^{2}u^{T}u\right)=\frac{d}{d\alpha}\left(x^{T}x-2\alpha x^{T}u+\alpha^{2}u^{T}u\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+-2x^{T}u+2\alpha u^{T}u=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\alpha=x^{T}u/u^{T}u=u^{T}x/u^{T}u
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And the corresponding vector is 
+\begin_inset Formula $\alpha u=u(u^{T}x)/(u^{T}u)=\frac{uu^{T}}{u^{T}u}x$
+\end_inset
+
+.
+ And if u has unit length, then the expession simplifies to 
+\begin_inset Formula $uu^{T}x$
+\end_inset
+
+, meaning that projection onto unit vector u is an operator with the form
+ 
+\begin_inset Formula $uu^{T}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}||x^{(i)}-f_{u}(x^{(i)})||^{2}=\sum_{i=1}^{m}||x^{(i)}-uu^{T}x^{(i)}||^{2}=\sum_{i=1}^{m}||(I-uu^{T})x^{(i)}||^{2}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i=1}^{m}x^{(i)T}(I-uu^{T})(I-uu^{T})x^{(i)}=\sum_{i=1}^{m}x^{(i)T}(I-2uu^{T}+uu^{T}uu^{T})x^{(i)}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i=1}^{m}x^{(i)T}(I-2uu^{T}+uu^{T})x^{(i)}=\sum_{i=1}^{m}x^{(i)T}(I-uu^{T})x^{(i)}=\sum_{i=1}^{m}x^{(i)T}x^{(i)}-x^{(i)T}uu^{T}x^{(i)}=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\sum_{i=1}^{m}||x^{(i)}||^{2}-(u^{T}x^{(i)})^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Minimizing the above with the condition of 
+\begin_inset Formula $u^{T}u=1$
+\end_inset
+
+ is the same as maximizing 
+\begin_inset Formula $\sum_{i=1}^{m}(u^{T}x^{(i)})^{2}$
+\end_inset
+
+ under the same condition.
+ Using lagrange multipliers:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}(u^{T}x^{(i)})^{2}-\lambda(u^{T}u-1)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Taking the gradient with respect to u:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}2u^{T}x^{(i)}x^{(i)}-\lambda2u=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\sum_{i=1}^{m}x^{(i)}x^{(i)T}\right)u-\lambda u=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\sum_{i=1}^{m}x^{(i)}x^{(i)T}\right)u=\lambda u
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Indicating that u is a unit eigenvector of the covariance matrix 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\left(\sum_{i=1}^{m}x^{(i)}x^{(i)T}\right)$
+\end_inset
+
+ with eigenvalue 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m}(u^{T}x^{(i)})^{2}=\sum_{i=1}^{m}u^{T}\left(x^{(i)}x^{(i)T}\right)u=u^{T}\left(\sum_{i=1}^{m}x^{(i)}x^{(i)T}\right)u=\lambda
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then maximizing the expression under the unit vector condition is the same
+ as picking the unit eigenvector of the covariance matrix with the largest
+ eigenvector 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+ This is the same as picking the first principal component for the data,
+ i.e.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\arg\min_{u:u^{T}u=1}\sum_{i=1}^{m}||x^{(i)}-f_{u}(x^{(i)})||_{2}^{2}=\text{the first principal component}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Independent components analysis
+\end_layout
+
+\begin_layout Standard
+The ICA algorithm was implemented and resulted in significant separation
+ of the audio sources, with an unmixing matrix W:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+   60.2045   16.0930   25.8635   -8.6011  -16.4088
+\end_layout
+
+\begin_layout Plain Layout
+
+   15.9707   24.3965   -3.3521  -17.5985    7.1330
+\end_layout
+
+\begin_layout Plain Layout
+
+    9.9593   -6.8037   25.5339   12.6079  -11.9719
+\end_layout
+
+\begin_layout Plain Layout
+
+  -10.8910   -0.5817   -5.8454    6.8577    1.2641
+\end_layout
+
+\begin_layout Plain Layout
+
+   -1.7151   17.5024   12.0437    8.1209   26.7804 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The code used:
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "p4/bellsej.m"
+lstparams "language=Matlab"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Markov decision processes
+\end_layout
+
+\begin_layout Subsection*
+(a)
+\end_layout
+
+\begin_layout Standard
+For any two value functions, 
+\begin_inset Formula $V_{1},V_{2}$
+\end_inset
+
+, finite valued, so that maximum operations do not diverge,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+V_{1}-V_{2}\le\max_{s\in S}|V_{1}(s)-V_{2}(s)|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+V_{1}\le V_{2}+\|V_{1}-V_{2}\|_{\infty}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+B(V_{1})\le B(V_{2}+\|V_{1}-V_{2}\|_{\infty})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+R(s)+\gamma\max_{a\in A}\sum_{s'\in S}P_{sa}(s')V_{1}(s')\le R(s)+\gamma\max_{a\in A}\sum_{s'\in S}P_{sa}(s')\left(V_{2}(s')+\|V_{1}-V_{2}\|_{\infty}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+R(s)+\gamma\max_{a\in A}\sum_{s'\in S}P_{sa}(s')V_{1}(s')\le R(s)+\gamma\max_{a\in A}\left(\left(\sum_{s'\in S}P_{sa}(s')V_{2}(s')\right)+\left(\sum_{s'\in S}P_{sa}(s')\right)\|V_{1}-V_{2}\|_{\infty}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+R(s)+\gamma\max_{a\in A}\sum_{s'\in S}P_{sa}(s')V_{1}(s')\le R(s)+\gamma\max_{a\in A}\left(\left(\sum_{s'\in S}P_{sa}(s')V_{2}(s')\right)+\|V_{1}-V_{2}\|_{\infty}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+R(s)+\gamma\max_{a\in A}\sum_{s'\in S}P_{sa}(s')V_{1}(s')\le R(s)+\gamma\left(\max_{a\in A}\left(\sum_{s'\in S}P_{sa}(s')V_{2}(s')\right)+\|V_{1}-V_{2}\|_{\infty}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+R(s)+\gamma\max_{a\in A}\sum_{s'\in S}P_{sa}(s')V_{1}(s')\le R(s)+\gamma\max_{a\in A}\left(\sum_{s'\in S}P_{sa}(s')V_{2}(s')\right)+\gamma\|V_{1}-V_{2}\|_{\infty}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+B(V_{1})\le B(V_{2})+\gamma\|V_{1}-V_{2}\|_{\infty}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+B(V_{1})-B(V_{2})\le\gamma\|V_{1}-V_{2}\|_{\infty}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\max_{s\in S}|B(V_{1})(s)-B(V_{2})(s)|\le\max_{s\in S}|\gamma\|V_{1}-V_{2}\|_{\infty}|
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\|B(V_{1})-B(V_{2})\|_{\infty}\le\gamma\|V_{1}-V_{2}\|_{\infty}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+(b)
+\end_layout
+
+\begin_layout Standard
+Assume that B has fixed points 
+\begin_inset Formula $V_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $V_{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $V_{1}\ne V_{2}$
+\end_inset
+
+, and 
+\begin_inset Formula $\gamma<1$
+\end_inset
+
+.
+ Then 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+B(V_{1})=V_{1}\ne B(V_{2})=V_{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+||B(V_{1})-B(V_{2})||_{\infty}\le\gamma||V_{1}-V_{2}||_{\infty}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y:=||V_{1}-V_{2}||_{\infty}\le\gamma||V_{1}-V_{2}||_{\infty}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y\le\gamma Y
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y(1-\gamma)\le0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is only true if: 
+\begin_inset Formula $Y\le0,(1-\gamma)\ge0$
+\end_inset
+
+ or 
+\begin_inset Formula $Y\ge0,(1-\gamma)\le0$
+\end_inset
+
+.
+ It is known that 
+\begin_inset Formula $Y>0$
+\end_inset
+
+ since by the max-norm being a norm, Y cannot be negative and 
+\begin_inset Formula $V_{1}\ne V_{2}$
+\end_inset
+
+ means that the norm of the difference cannot be 0, otherwise 
+\begin_inset Formula $V_{1}=V_{2}$
+\end_inset
+
+.
+ This implies that 
+\begin_inset Formula $(1-\gamma)\le0$
+\end_inset
+
+, or 
+\begin_inset Formula $\gamma\ge1$
+\end_inset
+
+, but it is given that 
+\begin_inset Formula $\gamma<1$
+\end_inset
+
+, resulting in a contradiction.
+ Therefore the assumption that B has two unequal fixed points is untrue,
+ and by the assumption from the problem that B has at least one fixed point,
+ it is concluded that B has exactly one fixed point.
+\end_layout
+
 \end_body
 \end_document
