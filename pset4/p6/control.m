@@ -81,7 +81,8 @@
 %%%%%%%%%% Simulation parameters %%%%%%%%%%
 
 pause_time = 0.001;
-min_trial_length_to_start_display = 0;
+%min_trial_length_to_start_display = 0;
+min_trial_length_to_start_display = Inf;
 display_started=0;
 
 NUM_STATES = 163;
@@ -144,8 +145,8 @@ consecutive_no_learning_trials = 0;
 % like there will be little learning after this, so end the simulation
 % here, and say the overall algorithm has converged. 
 
-while num_failures<max_failures
- while (consecutive_no_learning_trials < NO_LEARNING_THRESHOLD)
+%while num_failures<max_failures
+while (consecutive_no_learning_trials < NO_LEARNING_THRESHOLD)
   
   
   %%% CODE HERE: Write code to choose action (1 or 2) %%%
@@ -164,7 +165,7 @@ while num_failures<max_failures
   %%%  action=2;
   %%%end
   
-  %if num_failures<-20
+  %if num_failures<=20
   %  if (rand(1) < 0.5)
   %    action=1;
   %  else
@@ -237,7 +238,7 @@ while num_failures<max_failures
     % variable that checks when the whole simulation must end
     difference = Inf;
     iter = 0;
-    while difference < TOLERANCE
+    while difference > TOLERANCE
         V_old = V;
         m = max(P(:,:,1)*V, P(:,:,2)*V);
         V = Reward + GAMMA*m;
@@ -279,7 +280,7 @@ while num_failures<max_failures
   else 
     state=new_state;
   end
- end
 end
+%end
 % Plot the learning curve (time balanced vs trial)
 plot_learning_curve
