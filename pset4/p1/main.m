@@ -59,8 +59,8 @@ dev_accuracy = zeros(num_epoch, 1);
 
 %% Your code here
 [~, prob_train, prior_loss] = forward_prop(X_train, y_train, W1, b1, W2, b2, lambda);
-lambda = 0;
-%learning_rate = 5;%%%TODO CHECK
+%lambda = 0;
+%learning_rate = 0.05;%%%TODO CHECK
 %num_epoch = 200;
 for t = 1:num_epoch
     mb_range = 1:batch_size;
